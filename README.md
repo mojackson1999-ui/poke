@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 
 const typeColors = {
@@ -63,10 +65,10 @@ function StatBar({ label, val }) {
   );
 }
 
-export default function PokemonHub() {
+export default function Page() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("All");
-  const [selected, setSelected] = useState(ALL_POKEMON[8]); // Dragonite
+  const [selected, setSelected] = useState(ALL_POKEMON[8]);
   const [favorites, setFavorites] = useState(new Set());
   const [heroFloat, setHeroFloat] = useState(false);
 
@@ -114,8 +116,6 @@ export default function PokemonHub() {
 
   return (
     <div style={{fontFamily:"system-ui,sans-serif",maxWidth:1100,margin:"0 auto",padding:"0 1rem 3rem",color:"#1a1a1a"}}>
-
-      {/* NAV */}
       <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"1rem 0",borderBottom:"0.5px solid #e0e0e0",marginBottom:"2rem"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,fontSize:20,fontWeight:500}}>
           <div style={{width:28,height:28,borderRadius:"50%",background:"linear-gradient(180deg,#E24B4A 50%,white 50%)",border:"2px solid #333",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -133,7 +133,6 @@ export default function PokemonHub() {
         </button>
       </nav>
 
-      {/* HERO */}
       <section style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"2rem",alignItems:"center",padding:"2rem 0 3rem"}}>
         <div>
           <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"#EBF5FF",color:"#185FA5",fontSize:12,padding:"4px 12px",borderRadius:20,marginBottom:"1rem"}}>
@@ -153,14 +152,6 @@ export default function PokemonHub() {
               Build a Team
             </button>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
-            {[["1,025","Pokémon"],["18","Types"],["956","Moves"]].map(([n,l]) => (
-              <div key={l} style={{background:"#f5f5f5",borderRadius:8,padding:"1rem",textAlign:"center"}}>
-                <div style={{fontSize:22,fontWeight:500}}>{n}</div>
-                <div style={{fontSize:12,color:"#888",marginTop:2}}>{l}</div>
-              </div>
-            ))}
-          </div>
         </div>
         <div style={{background:"#f8f8f8",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"2rem",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:280}}>
           <div style={{fontSize:90,lineHeight:1,marginBottom:8,transform:heroFloat?"translateY(-10px)":"translateY(0)",transition:"transform 1.5s ease-in-out"}}>
@@ -173,7 +164,6 @@ export default function PokemonHub() {
         </div>
       </section>
 
-      {/* SEARCH */}
       <section id="dex">
         <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Pokédex</h2>
         <div style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
@@ -183,9 +173,6 @@ export default function PokemonHub() {
               onChange={e=>setSearch(e.target.value)}
               style={{flex:1,padding:"10px 14px",border:"0.5px solid #ccc",borderRadius:8,background:"#f8f8f8",fontSize:14,fontFamily:"inherit",outline:"none"}}
             />
-            <button style={{background:"#E24B4A",color:"white",border:"none",padding:"10px 18px",borderRadius:8,fontSize:14,cursor:"pointer",fontWeight:500}}>
-              Search
-            </button>
           </div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
             {FILTER_TYPES.map(t => (
@@ -200,7 +187,6 @@ export default function PokemonHub() {
         </div>
       </section>
 
-      {/* DETAIL PANEL */}
       {selected && (
         <div style={{display:"grid",gridTemplateColumns:"1fr 2fr",gap:"1.5rem",background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
           <div style={{textAlign:"center"}}>
@@ -212,14 +198,6 @@ export default function PokemonHub() {
             <div style={{display:"flex",justifyContent:"center",gap:6,marginBottom:"1rem",flexWrap:"wrap"}}>
               {selected.types.map(t=><TypeBadge key={t} type={t}/>)}
             </div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-              {[["Height",selected.height],["Weight",selected.weight],["Generation",selected.gen],["Category",selected.cat]].map(([l,v])=>(
-                <div key={l} style={{background:"#f5f5f5",borderRadius:8,padding:"8px 10px"}}>
-                  <div style={{fontSize:11,color:"#888"}}>{l}</div>
-                  <div style={{fontSize:14,fontWeight:500}}>{v}</div>
-                </div>
-              ))}
-            </div>
           </div>
           <div>
             <h3 style={{fontSize:16,fontWeight:500,marginBottom:"1rem",color:"#888"}}>Base Stats</h3>
@@ -228,24 +206,13 @@ export default function PokemonHub() {
         </div>
       )}
 
-      {/* POKEMON GRID */}
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:14,marginBottom:"2.5rem"}}>
-        {filtered.length === 0 ? (
-          <div style={{gridColumn:"1/-1",textAlign:"center",padding:"3rem",color:"#888"}}>
-            No Pokémon found. Try a different search!
-          </div>
-        ) : filtered.map(p => (
+        {filtered.map(p => (
           <div key={p.id} onClick={()=>setSelected(p)}
             style={{background:"white",border:selected?.id===p.id?"2px solid #E24B4A":"0.5px solid #e0e0e0",
               borderRadius:12,padding:"1.25rem 1rem",textAlign:"center",cursor:"pointer",
-              transition:"all .2s",position:"relative",
-              transform:selected?.id===p.id?"translateY(-2px)":"none"}}>
-            <button onClick={e=>toggleFav(p.id,e)}
-              style={{position:"absolute",top:8,right:8,background:"none",border:"none",cursor:"pointer",fontSize:16,opacity:favorites.has(p.id)?1:.35}}>
-              {favorites.has(p.id)?"❤️":"🤍"}
-            </button>
+              transition:"all .2s",position:"relative"}}>
             <span style={{fontSize:46,display:"block",marginBottom:8}}>{p.emoji}</span>
-            <div style={{fontSize:11,color:"#aaa",marginBottom:3}}>#{String(p.id).padStart(3,"0")}</div>
             <div style={{fontSize:14,fontWeight:500,textTransform:"capitalize",marginBottom:8}}>{p.name}</div>
             <div style={{display:"flex",justifyContent:"center",gap:4,flexWrap:"wrap"}}>
               {p.types.map(t=><TypeBadge key={t} type={t}/>)}
@@ -253,42 +220,6 @@ export default function PokemonHub() {
           </div>
         ))}
       </div>
-
-      {/* TYPE CHART */}
-      <section style={{marginBottom:"2.5rem"}}>
-        <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Type Distribution</h2>
-        <div style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem"}}>
-          {sortedTypes.map(([type,count]) => (
-            <div key={type} style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
-              <span style={{width:72,fontSize:13,fontWeight:500,textTransform:"capitalize",flexShrink:0}}>{type}</span>
-              <div style={{flex:1,height:22,background:"#f0f0f0",borderRadius:4,overflow:"hidden"}}>
-                <div style={{
-                  height:"100%",width:`${Math.round(count/maxCount*100)}%`,
-                  background:typeColors[type]||"#888",borderRadius:4,
-                  display:"flex",alignItems:"center",paddingLeft:8,
-                  fontSize:11,color:"white",fontWeight:500,transition:"width .8s ease"
-                }}>{count}</div>
-              </div>
-              <span style={{fontSize:12,color:"#888",width:28,flexShrink:0}}>{count}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section>
-        <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Everything You Need</h2>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14}}>
-          {features.map(f=>(
-            <div key={f.title} style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.25rem"}}>
-              <div style={{fontSize:24,marginBottom:"0.75rem"}}>{f.icon}</div>
-              <h3 style={{fontSize:15,fontWeight:500,marginBottom:6}}>{f.title}</h3>
-              <p style={{fontSize:13,color:"#666",lineHeight:1.6}}>{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
     </div>
   );
 }
