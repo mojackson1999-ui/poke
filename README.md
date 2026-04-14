@@ -1,298 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PokéDex World — Catch the Legend</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@300;400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #FF1C1C;
+    --red-dark: #C0000F;
+    --yellow: #FFD700;
+    --yellow-light: #FFF176;
+    --blue: #1A237E;
+    --blue-mid: #3949AB;
+    --white: #FAFAFA;
+    --black: #0D0D0D;
+    --gray: #E8E8E8;
+    --gray-mid: #9E9E9E;
+    --green: #4CAF50;
+    --fire: #FF6D00;
+    --water: #0288D1;
+    --psychic: #AD1457;
+    --electric: #F9A825;
+    --grass: #2E7D32;
+    --shadow: rgba(0,0,0,0.15);
+    --ink: rgba(0,0,0,0.08);
+  }
 
-import { useState, useEffect } from "react";
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-const typeColors = {
-  fire:"#D85A30",water:"#378ADD",grass:"#639922",electric:"#BA7517",
-  psychic:"#D4537E",ice:"#1D9E75",dragon:"#534AB7",dark:"#444441",
-  normal:"#888780",fighting:"#993C1D",poison:"#72243E",ground:"#854F0B",
-  flying:"#185FA5",bug:"#3B6D11",rock:"#5F5E5A",ghost:"#3C3489",
-  steel:"#0F6E56",fairy:"#993556"
-};
+  html { scroll-behavior: smooth; }
 
-const ALL_POKEMON = [
-  {id:1,name:"Bulbasaur",emoji:"🌱",types:["grass","poison"],hp:45,atk:49,def:49,spa:65,spd:65,spe:45,height:"0.7m",weight:"6.9kg",gen:"Gen I",cat:"Starter"},
-  {id:4,name:"Charmander",emoji:"🔥",types:["fire"],hp:39,atk:52,def:43,spa:60,spd:50,spe:65,height:"0.6m",weight:"8.5kg",gen:"Gen I",cat:"Starter"},
-  {id:7,name:"Squirtle",emoji:"🐢",types:["water"],hp:44,atk:48,def:65,spa:50,spd:64,spe:43,height:"0.5m",weight:"9.0kg",gen:"Gen I",cat:"Starter"},
-  {id:25,name:"Pikachu",emoji:"⚡",types:["electric"],hp:35,atk:55,def:40,spa:50,spd:50,spe:90,height:"0.4m",weight:"6.0kg",gen:"Gen I",cat:"Iconic"},
-  {id:39,name:"Jigglypuff",emoji:"🎵",types:["normal","fairy"],hp:115,atk:45,def:20,spa:45,spd:25,spe:20,height:"0.5m",weight:"5.5kg",gen:"Gen I",cat:"Normal"},
-  {id:94,name:"Gengar",emoji:"👻",types:["ghost","poison"],hp:60,atk:65,def:60,spa:130,spd:75,spe:110,height:"1.5m",weight:"40.5kg",gen:"Gen I",cat:"Ghost"},
-  {id:131,name:"Lapras",emoji:"🦕",types:["water","ice"],hp:130,atk:85,def:80,spa:85,spd:95,spe:60,height:"2.5m",weight:"220kg",gen:"Gen I",cat:"Rare"},
-  {id:143,name:"Snorlax",emoji:"😴",types:["normal"],hp:160,atk:110,def:65,spa:65,spd:110,spe:30,height:"2.1m",weight:"460kg",gen:"Gen I",cat:"Normal"},
-  {id:149,name:"Dragonite",emoji:"🐉",types:["dragon","flying"],hp:91,atk:134,def:95,spa:100,spd:100,spe:80,height:"2.2m",weight:"210kg",gen:"Gen I",cat:"Dragon"},
-  {id:150,name:"Mewtwo",emoji:"🔮",types:["psychic"],hp:106,atk:110,def:90,spa:154,spd:90,spe:130,height:"2.0m",weight:"122kg",gen:"Gen I",cat:"Legendary"},
-  {id:152,name:"Chikorita",emoji:"🍃",types:["grass"],hp:45,atk:49,def:65,spa:49,spd:65,spe:45,height:"0.9m",weight:"6.4kg",gen:"Gen II",cat:"Starter"},
-  {id:175,name:"Togepi",emoji:"🥚",types:["fairy"],hp:35,atk:20,def:65,spa:40,spd:65,spe:20,height:"0.3m",weight:"1.5kg",gen:"Gen II",cat:"Cute"},
-  {id:196,name:"Espeon",emoji:"☀️",types:["psychic"],hp:65,atk:65,def:60,spa:130,spd:95,spe:110,height:"0.9m",weight:"26.5kg",gen:"Gen II",cat:"Eeveelution"},
-  {id:197,name:"Umbreon",emoji:"🌙",types:["dark"],hp:95,atk:65,def:110,spa:60,spd:130,spe:65,height:"1.0m",weight:"27.0kg",gen:"Gen II",cat:"Eeveelution"},
-  {id:249,name:"Lugia",emoji:"🕊️",types:["psychic","flying"],hp:106,atk:90,def:130,spa:90,spd:154,spe:110,height:"5.2m",weight:"216kg",gen:"Gen II",cat:"Legendary"},
-  {id:282,name:"Gardevoir",emoji:"💫",types:["psychic","fairy"],hp:68,atk:65,def:65,spa:125,spd:115,spe:80,height:"1.6m",weight:"48.4kg",gen:"Gen III",cat:"Humanoid"},
-  {id:350,name:"Milotic",emoji:"🐟",types:["water"],hp:95,atk:60,def:79,spa:100,spd:125,spe:81,height:"6.2m",weight:"162kg",gen:"Gen III",cat:"Rare"},
-  {id:384,name:"Rayquaza",emoji:"🌪️",types:["dragon","flying"],hp:105,atk:150,def:90,spa:150,spd:90,spe:95,height:"7.0m",weight:"206.5kg",gen:"Gen III",cat:"Legendary"},
-  {id:448,name:"Lucario",emoji:"💎",types:["fighting","steel"],hp:70,atk:110,def:70,spa:115,spd:70,spe:90,height:"1.2m",weight:"54.0kg",gen:"Gen IV",cat:"Fighting"},
-  {id:493,name:"Arceus",emoji:"✨",types:["normal"],hp:120,atk:120,def:120,spa:120,spd:120,spe:120,height:"3.2m",weight:"320kg",gen:"Gen IV",cat:"Legendary"},
-  {id:571,name:"Zoroark",emoji:"🦊",types:["dark"],hp:60,atk:105,def:60,spa:105,spd:60,spe:105,height:"1.6m",weight:"81.1kg",gen:"Gen V",cat:"Dark"},
-  {id:644,name:"Zekrom",emoji:"⚫",types:["dragon","electric"],hp:100,atk:150,def:120,spa:120,spd:100,spe:90,height:"2.9m",weight:"345kg",gen:"Gen V",cat:"Legendary"},
-  {id:681,name:"Aegislash",emoji:"⚔️",types:["steel","ghost"],hp:60,atk:50,def:140,spa:50,spd:140,spe:60,height:"1.7m",weight:"53kg",gen:"Gen VI",cat:"Ghost"},
-  {id:700,name:"Sylveon",emoji:"🎀",types:["fairy"],hp:95,atk:65,def:65,spa:110,spd:130,spe:60,height:"1.0m",weight:"23.5kg",gen:"Gen VI",cat:"Eeveelution"},
-  {id:778,name:"Mimikyu",emoji:"🎭",types:["ghost","fairy"],hp:55,atk:90,def:80,spa:50,spd:105,spe:96,height:"0.2m",weight:"0.7kg",gen:"Gen VII",cat:"Ghost"},
-  {id:888,name:"Zacian",emoji:"🐺",types:["fairy"],hp:92,atk:130,def:115,spa:80,spd:115,spe:138,height:"2.8m",weight:"110kg",gen:"Gen VIII",cat:"Legendary"},
-  {id:906,name:"Sprigatito",emoji:"🐈",types:["grass"],hp:40,atk:61,def:54,spa:45,spd:45,spe:65,height:"0.4m",weight:"4.1kg",gen:"Gen IX",cat:"Starter"},
-];
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    overflow-x: hidden;
+  }
 
-const FILTER_TYPES = ["All","Fire","Water","Grass","Electric","Psychic","Ghost","Dragon","Fairy","Dark","Normal","Legendary","Starter","Eeveelution"];
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2.5rem;
+    background: var(--black);
+    border-bottom: 3px solid var(--yellow);
+  }
+  .nav-logo {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: var(--yellow);
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 0 var(--red);
+  }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--yellow); }
 
-function TypeBadge({ type }) {
-  const c = typeColors[type] || "#888";
-  return (
-    <span style={{
-      fontSize:11,padding:"3px 10px",borderRadius:20,fontWeight:500,textTransform:"capitalize",
-      background:`${c}22`,color:c,border:`1px solid ${c}44`,display:"inline-block"
-    }}>{type}</span>
-  );
-}
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    background: var(--black);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 2.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg-circle {
+    position: absolute;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.04);
+    top: 50%; right: -100px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  .hero-bg-circle::before {
+    content: '';
+    position: absolute;
+    width: 80%; height: 80%;
+    border-radius: 50%;
+    border: 3px solid rgba(255,215,0,0.06);
+    top: 10%; left: 10%;
+  }
+  .hero-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, var(--red) 0%, var(--red) 49%, var(--white) 49%, var(--white) 51%, #222 51%);
+  }
+  .hero-content { z-index: 1; }
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+  .hero-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(5rem, 10vw, 9rem);
+    line-height: 0.9;
+    color: var(--white);
+    letter-spacing: 3px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.35s forwards;
+  }
+  .hero-title span { color: var(--yellow); text-shadow: 4px 4px 0 var(--red); }
+  .hero-subtitle {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--gray-mid);
+    max-width: 460px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.5s forwards;
+  }
+  .hero-cta {
+    margin-top: 2.5rem;
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.65s forwards;
+  }
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    border: 3px solid var(--red-dark);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 4px 4px 0 var(--red-dark);
+  }
+  .btn-primary:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--red-dark); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--yellow);
+    padding: 0.9rem 2rem;
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    border: 3px solid var(--yellow);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-secondary:hover { background: var(--yellow); color: var(--black); }
 
-function StatBar({ label, val }) {
-  const pct = Math.min(100, Math.round(val / 160 * 100));
-  return (
-    <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-      <span style={{width:70,fontSize:12,color:"#888",flexShrink:0}}>{label}</span>
-      <span style={{width:30,fontSize:12,fontWeight:500,textAlign:"right",flexShrink:0}}>{val}</span>
-      <div style={{flex:1,height:6,background:"#f0f0f0",borderRadius:3,overflow:"hidden"}}>
-        <div style={{height:"100%",width:`${pct}%`,background:"#E24B4A",borderRadius:3,transition:"width .6s ease"}}/>
+  /* Pokéball SVG hero graphic */
+  .hero-graphic {
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1;
+    opacity: 0;
+    animation: fadeIn 0.8s 0.8s forwards;
+  }
+  .pokeball-hero {
+    width: min(420px, 90%);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  /* ─── GENERATION TICKER ─── */
+  .ticker {
+    background: var(--red);
+    border-top: 3px solid var(--red-dark);
+    border-bottom: 3px solid var(--red-dark);
+    padding: 0.75rem 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 3rem;
+    animation: ticker 20s linear infinite;
+  }
+  .ticker-item {
+    font-family: 'Bangers', cursive;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--yellow-light);
+  }
+  .ticker-dot { color: var(--white); opacity: 0.5; }
+
+  /* ─── TYPES SECTION ─── */
+  #types {
+    padding: 7rem 2.5rem;
+    background: var(--white);
+  }
+  .section-header {
+    margin-bottom: 3.5rem;
+  }
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gray-mid);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(3rem, 6vw, 5rem);
+    letter-spacing: 2px;
+    line-height: 1;
+    color: var(--black);
+  }
+  .section-title em { color: var(--red); font-style: normal; }
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  .type-card {
+    padding: 1.5rem 1.25rem;
+    border: 3px solid var(--black);
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.15s;
+    box-shadow: 4px 4px 0 var(--black);
+  }
+  .type-card:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--black); }
+  .type-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  .type-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+  .type-desc { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 0.25rem; line-height: 1.4; }
+  .type-card.fire { background: var(--fire); }
+  .type-card.water { background: var(--water); }
+  .type-card.grass { background: var(--grass); }
+  .type-card.electric { background: var(--electric); }
+  .type-card.psychic { background: var(--psychic); }
+  .type-card.ice { background: #00ACC1; }
+  .type-card.dragon { background: #4527A0; }
+  .type-card.dark { background: #263238; }
+  .type-card.normal { background: #757575; }
+  .type-card.fighting { background: #B71C1C; }
+  .type-card.ghost { background: #4A148C; }
+  .type-card.rock { background: #795548; }
+
+  /* ─── SPOTLIGHT ─── */
+  #spotlight {
+    padding: 7rem 2.5rem;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  #spotlight .section-title { color: var(--white); }
+  #spotlight .section-label { color: rgba(255,255,255,0.4); }
+  .spotlight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 3.5rem;
+  }
+  .spotlight-featured {
+    background: #111;
+    border: 3px solid var(--yellow);
+    padding: 2.5rem;
+    position: relative;
+    box-shadow: 8px 8px 0 var(--yellow);
+  }
+  .featured-number {
+    font-family: 'Bangers', cursive;
+    font-size: 5rem;
+    color: rgba(255,255,255,0.06);
+    position: absolute;
+    top: 1rem; right: 1.5rem;
+    line-height: 1;
+  }
+  .featured-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 1rem;
+  }
+  .featured-name {
+    font-family: 'Bangers', cursive;
+    font-size: 4rem;
+    color: var(--white);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .featured-types { display: flex; gap: 0.5rem; margin: 1rem 0; }
+  .type-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    border-radius: 2px;
+  }
+  .tb-fire { background: var(--fire); color: var(--white); }
+  .tb-flying { background: #7986CB; color: var(--white); }
+  .tb-water { background: var(--water); color: var(--white); }
+  .tb-ice { background: #00ACC1; color: var(--white); }
+  .tb-psychic { background: var(--psychic); color: var(--white); }
+  .tb-dragon { background: #4527A0; color: var(--white); }
+  .tb-electric { background: var(--electric); color: var(--black); }
+  .featured-desc {
+    font-size: 0.9rem;
+    line-height: 1.7;
+    color: var(--gray-mid);
+    margin-top: 1rem;
+  }
+  .stat-bars { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
+  .stat-row { display: grid; grid-template-columns: 90px 30px 1fr; gap: 0.75rem; align-items: center; }
+  .stat-name { font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-mid); }
+  .stat-val { font-size: 0.8rem; font-weight: 700; color: var(--white); text-align: right; }
+  .stat-bar-bg { height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
+  .stat-bar-fill { height: 100%; background: var(--yellow); border-radius: 3px; transition: width 1s ease; }
+  .spotlight-list { display: flex; flex-direction: column; gap: 1rem; }
+  .poke-row {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .poke-row:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
+  .poke-num {
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    color: rgba(255,255,255,0.2);
+  }
+  .poke-info-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: var(--white);
+  }
+  .poke-info-type { font-size: 0.7rem; color: var(--gray-mid); margin-top: 2px; }
+  .poke-arrow { color: var(--yellow); font-size: 1.2rem; }
+
+  /* ─── GENERATIONS SECTION ─── */
+  #generations {
+    padding: 7rem 2.5rem;
+    background: var(--gray);
+  }
+  .gen-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .gen-card {
+    background: var(--white);
+    border: 3px solid var(--black);
+    padding: 2rem;
+    box-shadow: 5px 5px 0 var(--black);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .gen-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--black); }
+  .gen-number {
+    font-family: 'Bangers', cursive;
+    font-size: 4.5rem;
+    line-height: 1;
+    color: var(--ink);
+    color: rgba(0,0,0,0.07);
+  }
+  .gen-name {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    letter-spacing: 1px;
+    color: var(--black);
+    margin-top: -0.5rem;
+  }
+  .gen-region {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.75rem;
+  }
+  .gen-desc { font-size: 0.85rem; line-height: 1.6; color: #555; }
+  .gen-count {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gray-mid);
+    letter-spacing: 1px;
+  }
+  .gen-count strong { color: var(--black); font-size: 1rem; }
+
+  /* ─── TRIVIA SECTION ─── */
+  #trivia {
+    padding: 7rem 2.5rem;
+    background: var(--red);
+  }
+  #trivia .section-title { color: var(--white); }
+  #trivia .section-label { color: rgba(255,255,255,0.5); }
+  .trivia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+  .trivia-card {
+    background: rgba(0,0,0,0.2);
+    border: 2px solid rgba(255,255,255,0.2);
+    padding: 2rem;
+    transition: background 0.15s;
+  }
+  .trivia-card:hover { background: rgba(0,0,0,0.35); }
+  .trivia-num {
+    font-family: 'Bangers', cursive;
+    font-size: 3rem;
+    color: var(--yellow);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  .trivia-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 0.4rem;
+  }
+  .trivia-text { font-size: 1rem; font-weight: 500; color: var(--white); line-height: 1.5; }
+
+  /* ─── STARTERS ─── */
+  #starters {
+    padding: 7rem 2.5rem;
+    background: var(--black);
+    text-align: center;
+  }
+  #starters .section-header { text-align: center; }
+  #starters .section-title { color: var(--white); }
+  #starters .section-label { color: rgba(255,255,255,0.4); }
+  .starters-row {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 3.5rem;
+  }
+  .starter-card {
+    width: 220px;
+    padding: 2.5rem 1.5rem 2rem;
+    border: 3px solid;
+    text-align: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: default;
+  }
+  .starter-card:hover { transform: translateY(-8px); }
+  .starter-card.grass-card { border-color: var(--grass); box-shadow: 0 0 30px rgba(46,125,50,0.3); }
+  .starter-card.fire-card { border-color: var(--fire); box-shadow: 0 0 30px rgba(255,109,0,0.3); }
+  .starter-card.water-card { border-color: var(--water); box-shadow: 0 0 30px rgba(2,136,209,0.3); }
+  .starter-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+  .starter-name {
+    font-family: 'Bangers', cursive;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 0.25rem;
+  }
+  .starter-type {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .starter-card.grass-card .starter-type { color: #81C784; }
+  .starter-card.fire-card .starter-type { color: #FFB74D; }
+  .starter-card.water-card .starter-type { color: #4FC3F7; }
+  .starter-desc { font-size: 0.82rem; line-height: 1.6; color: var(--gray-mid); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: #0a0a0a;
+    border-top: 3px solid var(--yellow);
+    padding: 3rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .footer-brand .nav-logo { font-size: 2.5rem; }
+  .footer-tagline { font-size: 0.85rem; color: var(--gray-mid); margin-top: 0.5rem; line-height: 1.6; }
+  .footer-col-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 1rem;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .footer-links a {
+    color: var(--gray-mid);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+  .footer-bottom {
+    background: #0a0a0a;
+    padding: 1rem 2.5rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #444;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+  }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { display: none; }
+    #hero { grid-template-columns: 1fr; padding: 6rem 1.25rem 3rem; }
+    .hero-graphic { margin-top: 2rem; }
+    .spotlight-grid { grid-template-columns: 1fr; gap: 2rem; }
+    footer { grid-template-columns: 1fr; }
+    #types, #spotlight, #generations, #trivia, #starters { padding: 4rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav aria-label="Main navigation">
+  <div class="nav-logo">PokéDex</div>
+  <ul class="nav-links">
+    <li><a href="#types">Types</a></li>
+    <li><a href="#spotlight">Pokémon</a></li>
+    <li><a href="#generations">Generations</a></li>
+    <li><a href="#starters">Starters</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero" aria-label="Hero section">
+  <div class="hero-stripe" aria-hidden="true"></div>
+  <div class="hero-bg-circle" aria-hidden="true"></div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">The Ultimate Pokémon Universe</p>
+    <h1 class="hero-title">Gotta<br><span>Catch</span><br>'Em All</h1>
+    <p class="hero-subtitle">Over 1,000 species. Nine generations of adventure. One world where creatures of unimaginable power live alongside humanity — waiting to be discovered, trained, and befriended.</p>
+    <div class="hero-cta">
+      <a href="#spotlight" class="btn-primary" aria-label="Explore Pokémon">Explore Now</a>
+      <a href="#types" class="btn-secondary" aria-label="Learn about types">All Types →</a>
+    </div>
+  </div>
+
+  <div class="hero-graphic" aria-hidden="true">
+    <svg class="pokeball-hero" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Pokéball illustration">
+      <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
+      <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,215,0,0.12)" stroke-width="2"/>
+      <!-- Top half -->
+      <path d="M10,200 A190,190 0 0,1 390,200 Z" fill="#FF1C1C"/>
+      <!-- Bottom half -->
+      <path d="M10,200 A190,190 0 0,0 390,200 Z" fill="#FAFAFA"/>
+      <!-- Center stripe -->
+      <rect x="0" y="185" width="400" height="30" fill="#0D0D0D"/>
+      <!-- Center button outer -->
+      <circle cx="200" cy="200" r="42" fill="#0D0D0D"/>
+      <!-- Center button inner -->
+      <circle cx="200" cy="200" r="32" fill="#FAFAFA"/>
+      <!-- Highlight -->
+      <circle cx="200" cy="200" r="24" fill="none" stroke="rgba(255,215,0,0.6)" stroke-width="3"/>
+      <circle cx="186" cy="186" r="7" fill="rgba(255,255,255,0.5)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner">
+    <span class="ticker-item">Generation I — Kanto</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation II — Johto</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation III — Hoenn</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation IV — Sinnoh</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation V — Unova</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation VI — Kalos</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation VII — Alola</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation VIII — Galar</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation IX — Paldea</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation I — Kanto</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation II — Johto</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation III — Hoenn</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation IV — Sinnoh</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation V — Unova</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation VI — Kalos</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation VII — Alola</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation VIII — Galar</span><span class="ticker-dot">◆</span>
+    <span class="ticker-item">Generation IX — Paldea</span><span class="ticker-dot">◆</span>
+  </div>
+</div>
+
+<!-- TYPES -->
+<section id="types" aria-label="Pokémon types">
+  <div class="section-header reveal">
+    <p class="section-label">Battle Mechanics</p>
+    <h2 class="section-title">Master the <em>18 Types</em></h2>
+  </div>
+
+  <div class="types-grid">
+    <div class="type-card fire reveal" role="article">
+      <div class="type-icon" aria-hidden="true">🔥</div>
+      <div class="type-name">Fire</div>
+      <div class="type-desc">Scorching offense. Melts Steel, burns Grass & Ice</div>
+    </div>
+    <div class="type-card water reveal" role="article">
+      <div class="type-icon" aria-hidden="true">💧</div>
+      <div class="type-name">Water</div>
+      <div class="type-desc">Adaptable & powerful. Dominates Fire & Rock</div>
+    </div>
+    <div class="type-card grass reveal" role="article">
+      <div class="type-icon" aria-hidden="true">🌿</div>
+      <div class="type-name">Grass</div>
+      <div class="type-desc">Nature's resilience. Absorbs Ground & Water</div>
+    </div>
+    <div class="type-card electric reveal" role="article">
+      <div class="type-icon" aria-hidden="true">⚡</div>
+      <div class="type-name">Electric</div>
+      <div class="type-desc">Shocking speed. Only Ground escapes its sparks</div>
+    </div>
+    <div class="type-card psychic reveal" role="article">
+      <div class="type-icon" aria-hidden="true">🔮</div>
+      <div class="type-name">Psychic</div>
+      <div class="type-desc">Mind over matter. Crushes Poison & Fighting</div>
+    </div>
+    <div class="type-card ice reveal" role="article">
+      <div class="type-icon" aria-hidden="true">❄️</div>
+      <div class="type-name">Ice</div>
+      <div class="type-desc">Fragile but deadly. Freezes Dragon in its tracks</div>
+    </div>
+    <div class="type-card dragon reveal" role="article">
+      <div class="type-icon" aria-hidden="true">🐉</div>
+      <div class="type-name">Dragon</div>
+      <div class="type-desc">Raw legendary power. Weak only to itself & Fairy</div>
+    </div>
+    <div class="type-card dark reveal" role="article">
+      <div class="type-icon" aria-hidden="true">🌑</div>
+      <div class="type-name">Dark</div>
+      <div class="type-desc">Underhanded tactics. Counters Psychic & Ghost</div>
+    </div>
+    <div class="type-card normal reveal" role="article">
+      <div class="type-icon" aria-hidden="true">⭐</div>
+      <div class="type-name">Normal</div>
+      <div class="type-desc">Jack of all trades. No super-effective hits</div>
+    </div>
+    <div class="type-card fighting reveal" role="article">
+      <div class="type-icon" aria-hidden="true">👊</div>
+      <div class="type-name">Fighting</div>
+      <div class="type-desc">Brute strength. Cracks Steel, Rock & Ice with ease</div>
+    </div>
+    <div class="type-card ghost reveal" role="article">
+      <div class="type-icon" aria-hidden="true">👻</div>
+      <div class="type-name">Ghost</div>
+      <div class="type-desc">Immune to Normal. Haunts Psychic & Ghost types</div>
+    </div>
+    <div class="type-card rock reveal" role="article">
+      <div class="type-icon" aria-hidden="true">🪨</div>
+      <div class="type-name">Rock</div>
+      <div class="type-desc">Defensive fortress. Pelts Flying & Fire harshly</div>
+    </div>
+  </div>
+</section>
+
+<!-- SPOTLIGHT -->
+<section id="spotlight" aria-label="Pokémon spotlight">
+  <div class="section-header reveal">
+    <p class="section-label">Hall of Fame</p>
+    <h2 class="section-title">Legendary <em>Icons</em></h2>
+  </div>
+
+  <div class="spotlight-grid">
+    <div class="spotlight-featured reveal" aria-label="Featured Pokémon: Charizard">
+      <div class="featured-number" aria-hidden="true">#006</div>
+      <div class="featured-label">Featured Pokémon</div>
+      <div class="featured-name">Charizard</div>
+      <div class="featured-types">
+        <span class="type-badge tb-fire">Fire</span>
+        <span class="type-badge tb-flying">Flying</span>
+      </div>
+      <p class="featured-desc">
+        The flame on the tip of its tail indicates Charizard's life force. If it is healthy, the flame burns brightly. Soaring through clouds at 4,600 feet, it spits fire hot enough to melt boulders — making it one of the most recognizable and beloved Pokémon in history.
+      </p>
+      <div class="stat-bars" aria-label="Charizard base stats">
+        <div class="stat-row">
+          <span class="stat-name">HP</span>
+          <span class="stat-val">78</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="52%"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Attack</span>
+          <span class="stat-val">84</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="56%"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Sp. Attack</span>
+          <span class="stat-val">109</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="73%"></div></div>
+        </div>
+        <div class="stat-row">
+          <span class="stat-name">Speed</span>
+          <span class="stat-val">100</span>
+          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="67%"></div></div>
+        </div>
       </div>
     </div>
-  );
-}
 
-export default function PokemonHub() {
-  const [search, setSearch] = useState("");
-  const [filter, setFilter] = useState("All");
-  const [selected, setSelected] = useState(ALL_POKEMON[8]); // Dragonite
-  const [favorites, setFavorites] = useState(new Set());
-  const [heroFloat, setHeroFloat] = useState(false);
+    <div class="spotlight-list reveal" aria-label="Other notable Pokémon">
+      <div class="poke-row" role="article" tabindex="0" aria-label="Mewtwo, number 150, Psychic type">
+        <div class="poke-num">#150</div>
+        <div>
+          <div class="poke-info-name">Mewtwo</div>
+          <div class="poke-info-type"><span class="type-badge tb-psychic" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Psychic</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+      <div class="poke-row" role="article" tabindex="0" aria-label="Pikachu, number 25, Electric type">
+        <div class="poke-num">#025</div>
+        <div>
+          <div class="poke-info-name">Pikachu</div>
+          <div class="poke-info-type"><span class="type-badge tb-electric" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Electric</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+      <div class="poke-row" role="article" tabindex="0" aria-label="Gengar, number 94, Ghost and Poison type">
+        <div class="poke-num">#094</div>
+        <div>
+          <div class="poke-info-name">Gengar</div>
+          <div class="poke-info-type"><span class="type-badge tb-flying" style="font-size:0.6rem;padding:0.2rem 0.5rem;background:#4A148C;">Ghost</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+      <div class="poke-row" role="article" tabindex="0" aria-label="Dragonite, number 149, Dragon and Flying type">
+        <div class="poke-num">#149</div>
+        <div>
+          <div class="poke-info-name">Dragonite</div>
+          <div class="poke-info-type"><span class="type-badge tb-dragon" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Dragon</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+      <div class="poke-row" role="article" tabindex="0" aria-label="Lucario, number 448, Fighting and Steel type">
+        <div class="poke-num">#448</div>
+        <div>
+          <div class="poke-info-name">Lucario</div>
+          <div class="poke-info-type"><span class="type-badge" style="font-size:0.6rem;padding:0.2rem 0.5rem;background:#B71C1C;color:white;">Fighting</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+      <div class="poke-row" role="article" tabindex="0" aria-label="Gyarados, number 130, Water and Flying type">
+        <div class="poke-num">#130</div>
+        <div>
+          <div class="poke-info-name">Gyarados</div>
+          <div class="poke-info-type"><span class="type-badge tb-water" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Water</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+      <div class="poke-row" role="article" tabindex="0" aria-label="Eevee, number 133, Normal type">
+        <div class="poke-num">#133</div>
+        <div>
+          <div class="poke-info-name">Eevee</div>
+          <div class="poke-info-type"><span class="type-badge" style="font-size:0.6rem;padding:0.2rem 0.5rem;background:#757575;color:white;">Normal</span></div>
+        </div>
+        <div class="poke-arrow">→</div>
+      </div>
+    </div>
+  </div>
+</section>
 
-  useEffect(() => {
-    const t = setInterval(() => setHeroFloat(f => !f), 1500);
-    return () => clearInterval(t);
-  }, []);
+<!-- GENERATIONS -->
+<section id="generations" aria-label="Pokémon generations">
+  <div class="section-header reveal">
+    <p class="section-label">Journey Through Time</p>
+    <h2 class="section-title">Nine <em>Generations</em></h2>
+  </div>
 
-  const filtered = ALL_POKEMON.filter(p => {
-    const ms = p.name.toLowerCase().includes(search.toLowerCase());
-    const mf = filter === "All" ||
-      p.types.includes(filter.toLowerCase()) ||
-      p.cat === filter;
-    return ms && mf;
+  <div class="gen-grid">
+    <div class="gen-card reveal" role="article">
+      <div class="gen-number" aria-hidden="true">I</div>
+      <div class="gen-region">Kanto Region</div>
+      <div class="gen-name">Red & Blue</div>
+      <p class="gen-desc">Where it all began. Professor Oak hands you a Pokédex in Pallet Town and an entire world opens up. The original 151 became cultural icons overnight.</p>
+      <div class="gen-count"><strong>151</strong> Pokémon · 1996</div>
+    </div>
+    <div class="gen-card reveal" role="article">
+      <div class="gen-number" aria-hidden="true">II</div>
+      <div class="gen-region">Johto Region</div>
+      <div class="gen-name">Gold & Silver</div>
+      <p class="gen-desc">Day and night cycles changed everything. The addition of breeding, held items, and two full regions to explore cemented Pokémon as a franchise for life.</p>
+      <div class="gen-count"><strong>100</strong> Pokémon · 1999</div>
+    </div>
+    <div class="gen-card reveal" role="article">
+      <div class="gen-number" aria-hidden="true">III</div>
+      <div class="gen-region">Hoenn Region</div>
+      <div class="gen-name">Ruby & Sapphire</div>
+      <p class="gen-desc">A tropical paradise of water routes and secret bases. Contests, double battles, and abilities reinvented competitive play entirely.</p>
+      <div class="gen-count"><strong>135</strong> Pokémon · 2002</div>
+    </div>
+    <div class="gen-card reveal" role="article">
+      <div class="gen-number" aria-hidden="true">IV</div>
+      <div class="gen-region">Sinnoh Region</div>
+      <div class="gen-name">Diamond & Pearl</div>
+      <p class="gen-desc">Mythology and time travel. Dialga, Palkia, and Giratina introduced cosmic stakes while the Underground brought players together in brand new ways.</p>
+      <div class="gen-count"><strong>107</strong> Pokémon · 2006</div>
+    </div>
+    <div class="gen-card reveal" role="article">
+      <div class="gen-number" aria-hidden="true">V</div>
+      <div class="gen-region">Unova Region</div>
+      <div class="gen-name">Black & White</div>
+      <p class="gen-desc">The most ambitious story in the series. A cinematic adventure questioning whether Pokémon battles are ethical — and featuring the best rival cast in franchise history.</p>
+      <div class="gen-count"><strong>156</strong> Pokémon · 2010</div>
+    </div>
+    <div class="gen-card reveal" role="article">
+      <div class="gen-number" aria-hidden="true">IX</div>
+      <div class="gen-region">Paldea Region</div>
+      <div class="gen-name">Scarlet & Violet</div>
+      <p class="gen-desc">The first truly open-world Pokémon games. Three intertwining storylines let you blaze your own path through a sun-drenched Mediterranean landscape filled with new discoveries.</p>
+      <div class="gen-count"><strong>120</strong> Pokémon · 2022</div>
+    </div>
+  </div>
+</section>
+
+<!-- TRIVIA -->
+<section id="trivia" aria-label="Pokémon facts and statistics">
+  <div class="section-header reveal">
+    <p class="section-label">By the Numbers</p>
+    <h2 class="section-title">The Scale of <em>Pokémon</em></h2>
+  </div>
+
+  <div class="trivia-grid">
+    <div class="trivia-card reveal" role="article">
+      <div class="trivia-num">1,025</div>
+      <div class="trivia-label">Total Species</div>
+      <div class="trivia-text">Pokémon officially registered in the National Pokédex as of Generation IX</div>
+    </div>
+    <div class="trivia-card reveal" role="article">
+      <div class="trivia-num">18</div>
+      <div class="trivia-label">Types</div>
+      <div class="trivia-text">Unique elemental types governing 324 possible matchup combinations</div>
+    </div>
+    <div class="trivia-card reveal" role="article">
+      <div class="trivia-num">440M+</div>
+      <div class="trivia-label">Games Sold</div>
+      <div class="trivia-text">Making Pokémon the highest-grossing media franchise of all time — over $150 billion</div>
+    </div>
+    <div class="trivia-card reveal" role="article">
+      <div class="trivia-num">900+</div>
+      <div class="trivia-label">Anime Episodes</div>
+      <div class="trivia-text">Ash Ketchum's journey spanned 26 years before he finally became World Champion</div>
+    </div>
+    <div class="trivia-card reveal" role="article">
+      <div class="trivia-num">43.2B</div>
+      <div class="trivia-label">Cards Sold</div>
+      <div class="trivia-text">The Pokémon Trading Card Game remains one of the world's most collected hobbies</div>
+    </div>
+    <div class="trivia-card reveal" role="article">
+      <div class="trivia-num">1996</div>
+      <div class="trivia-label">Year Born</div>
+      <div class="trivia-text">Satoshi Tajiri's childhood dream of insect collecting became the world's greatest monster franchise</div>
+    </div>
+  </div>
+</section>
+
+<!-- STARTERS -->
+<section id="starters" aria-label="Original starter Pokémon">
+  <div class="section-header">
+    <p class="section-label reveal">The Classic Choice</p>
+    <h2 class="section-title reveal">Choose Your <em>Starter</em></h2>
+  </div>
+
+  <div class="starters-row">
+    <div class="starter-card grass-card reveal" role="article" aria-label="Bulbasaur, Grass type starter">
+      <div class="starter-icon" aria-hidden="true">🌱</div>
+      <div class="starter-name">Bulbasaur</div>
+      <div class="starter-type">Grass / Poison</div>
+      <p class="starter-desc">Born with a bulb on its back, this dinosaur-frog hybrid is the easiest choice for first-time trainers — its Vine Whip dominates the first two gyms.</p>
+    </div>
+    <div class="starter-card fire-card reveal" role="article" aria-label="Charmander, Fire type starter">
+      <div class="starter-icon" aria-hidden="true">🔥</div>
+      <div class="starter-name">Charmander</div>
+      <div class="starter-type">Fire</div>
+      <p class="starter-desc">The hard-mode starter with the highest payoff. Evolves into the iconic Charizard — the single most popular Pokémon ever created, and a fan favorite for 30 years.</p>
+    </div>
+    <div class="starter-card water-card reveal" role="article" aria-label="Squirtle, Water type starter">
+      <div class="starter-icon" aria-hidden="true">💧</div>
+      <div class="starter-name">Squirtle</div>
+      <div class="starter-type">Water</div>
+      <p class="starter-desc">The well-rounded choice. Squirtle's squad is legendary. It evolves into Blastoise, a tank-like powerhouse that fires jets of water with pinpoint accuracy.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer aria-label="Footer">
+  <div class="footer-brand">
+    <div class="nav-logo">PokéDex</div>
+    <p class="footer-tagline">A fan-made celebration of the Pokémon universe. Not affiliated with Nintendo, Game Freak, or The Pokémon Company.</p>
+  </div>
+  <div>
+    <div class="footer-col-title">Explore</div>
+    <ul class="footer-links">
+      <li><a href="#types">Battle Types</a></li>
+      <li><a href="#spotlight">Hall of Fame</a></li>
+      <li><a href="#generations">All Generations</a></li>
+      <li><a href="#starters">Starter Pokémon</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Discover</div>
+    <ul class="footer-links">
+      <li><a href="#trivia">Pokémon Facts</a></li>
+      <li><a href="#hero">Back to Top</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <p>Pokémon and all related names are trademarks of Nintendo / Creatures Inc. / GAME FREAK inc. Fan tribute only.</p>
+</div>
+
+<script>
+  // Intersection observer for reveal animations
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // Stagger sibling reveals
+  document.querySelectorAll('.types-grid, .gen-grid, .trivia-grid, .starters-row, .spotlight-list').forEach(grid => {
+    const children = grid.querySelectorAll('.reveal');
+    children.forEach((child, i) => {
+      child.style.transitionDelay = `${i * 60}ms`;
+    });
   });
 
-  const toggleFav = (id, e) => {
-    e.stopPropagation();
-    setFavorites(prev => {
-      const next = new Set(prev);
-      next.has(id) ? next.delete(id) : next.add(id);
-      return next;
+  // Animate stat bars when they come into view
+  const statObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.stat-bar-fill').forEach(bar => {
+          const target = bar.dataset.width;
+          bar.style.width = target;
+        });
+        statObserver.unobserve(entry.target);
+      }
     });
-  };
+  }, { threshold: 0.3 });
 
-  const typeCounts = {};
-  ALL_POKEMON.forEach(p => p.types.forEach(t => { typeCounts[t] = (typeCounts[t]||0)+1; }));
-  const sortedTypes = Object.entries(typeCounts).sort((a,b)=>b[1]-a[1]);
-  const maxCount = sortedTypes[0]?.[1] || 1;
-
-  const stats = [
-    {label:"HP",val:selected.hp},{label:"Attack",val:selected.atk},
-    {label:"Defense",val:selected.def},{label:"Sp. Atk",val:selected.spa},
-    {label:"Sp. Def",val:selected.spd},{label:"Speed",val:selected.spe},
-  ];
-
-  const features = [
-    {icon:"⚔️",title:"Type Matchups",desc:"Instantly see what's super effective, resistant, or immune for every Pokémon type combination."},
-    {icon:"📊",title:"Stat Comparisons",desc:"Visualize base stats with interactive bars. Filter by legendary, starter, or any generation."},
-    {icon:"🏆",title:"Team Builder",desc:"Build a squad of 6. Automatic coverage gap and synergy analysis included."},
-    {icon:"🔍",title:"Advanced Search",desc:"Filter by type, generation, stat ranges, abilities, egg groups, and 30+ other criteria."},
-    {icon:"✨",title:"Shiny Gallery",desc:"Toggle shiny versions for every Pokémon. Explore the full palette of alternate colorations."},
-    {icon:"🗺️",title:"Location Guide",desc:"Find where to catch each Pokémon in every game, with encounter rates and conditions."},
-  ];
-
-  return (
-    <div style={{fontFamily:"system-ui,sans-serif",maxWidth:1100,margin:"0 auto",padding:"0 1rem 3rem",color:"#1a1a1a"}}>
-
-      {/* NAV */}
-      <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"1rem 0",borderBottom:"0.5px solid #e0e0e0",marginBottom:"2rem"}}>
-        <div style={{display:"flex",alignItems:"center",gap:10,fontSize:20,fontWeight:500}}>
-          <div style={{width:28,height:28,borderRadius:"50%",background:"linear-gradient(180deg,#E24B4A 50%,white 50%)",border:"2px solid #333",display:"flex",alignItems:"center",justifyContent:"center"}}>
-            <div style={{width:8,height:8,background:"white",borderRadius:"50%",border:"2px solid #333"}}/>
-          </div>
-          PokéHub
-        </div>
-        <div style={{display:"flex",gap:24,fontSize:14,color:"#666"}}>
-          {["Pokédex","Types","Moves","Teams"].map(l => (
-            <span key={l} style={{cursor:"pointer"}}>{l}</span>
-          ))}
-        </div>
-        <button style={{background:"#E24B4A",color:"white",border:"none",padding:"8px 18px",borderRadius:8,fontSize:14,cursor:"pointer",fontWeight:500}}>
-          Start Journey
-        </button>
-      </nav>
-
-      {/* HERO */}
-      <section style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"2rem",alignItems:"center",padding:"2rem 0 3rem"}}>
-        <div>
-          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"#EBF5FF",color:"#185FA5",fontSize:12,padding:"4px 12px",borderRadius:20,marginBottom:"1rem"}}>
-            ⚡ Gen I–IX Complete
-          </div>
-          <h1 style={{fontSize:42,fontWeight:500,lineHeight:1.2,marginBottom:"1rem"}}>
-            The Ultimate<br/><span style={{color:"#E24B4A"}}>Pokédex</span><br/>Experience
-          </h1>
-          <p style={{fontSize:16,color:"#666",lineHeight:1.7,marginBottom:"1.5rem"}}>
-            Explore, search, and master every Pokémon across all nine generations. Compare stats, discover type matchups, and build your perfect team.
-          </p>
-          <div style={{display:"flex",gap:12,marginBottom:"2rem"}}>
-            <button style={{background:"#E24B4A",color:"white",border:"none",padding:"12px 24px",borderRadius:8,fontSize:15,cursor:"pointer",fontWeight:500}}>
-              Open Pokédex
-            </button>
-            <button style={{background:"transparent",color:"#1a1a1a",border:"0.5px solid #ccc",padding:"12px 24px",borderRadius:8,fontSize:15,cursor:"pointer"}}>
-              Build a Team
-            </button>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:12}}>
-            {[["1,025","Pokémon"],["18","Types"],["956","Moves"]].map(([n,l]) => (
-              <div key={l} style={{background:"#f5f5f5",borderRadius:8,padding:"1rem",textAlign:"center"}}>
-                <div style={{fontSize:22,fontWeight:500}}>{n}</div>
-                <div style={{fontSize:12,color:"#888",marginTop:2}}>{l}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div style={{background:"#f8f8f8",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"2rem",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:280}}>
-          <div style={{fontSize:90,lineHeight:1,marginBottom:8,transform:heroFloat?"translateY(-10px)":"translateY(0)",transition:"transform 1.5s ease-in-out"}}>
-            {selected.emoji}
-          </div>
-          <div style={{fontSize:18,fontWeight:500,marginBottom:8}}>{selected.name}</div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
-            {selected.types.map(t => <TypeBadge key={t} type={t}/>)}
-          </div>
-        </div>
-      </section>
-
-      {/* SEARCH */}
-      <section id="dex">
-        <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Pokédex</h2>
-        <div style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
-          <div style={{display:"flex",gap:10,marginBottom:"1rem"}}>
-            <input
-              type="text" placeholder="Search Pokémon by name…" value={search}
-              onChange={e=>setSearch(e.target.value)}
-              style={{flex:1,padding:"10px 14px",border:"0.5px solid #ccc",borderRadius:8,background:"#f8f8f8",fontSize:14,fontFamily:"inherit",outline:"none"}}
-            />
-            <button style={{background:"#E24B4A",color:"white",border:"none",padding:"10px 18px",borderRadius:8,fontSize:14,cursor:"pointer",fontWeight:500}}>
-              Search
-            </button>
-          </div>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-            {FILTER_TYPES.map(t => (
-              <button key={t} onClick={()=>setFilter(t)}
-                style={{padding:"6px 14px",borderRadius:20,border:filter===t?"1px solid #E24B4A":"0.5px solid #ddd",
-                  background:filter===t?"#FCEBEB":"transparent",
-                  color:filter===t?"#E24B4A":"#666",fontSize:13,cursor:"pointer",transition:"all .2s"}}>
-                {t}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* DETAIL PANEL */}
-      {selected && (
-        <div style={{display:"grid",gridTemplateColumns:"1fr 2fr",gap:"1.5rem",background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
-          <div style={{textAlign:"center"}}>
-            <div style={{fontSize:88,lineHeight:1,marginBottom:8,display:"inline-block",transform:heroFloat?"translateY(-8px)":"translateY(0)",transition:"transform 1.5s ease-in-out"}}>
-              {selected.emoji}
-            </div>
-            <div style={{fontSize:13,color:"#888",marginBottom:4}}>#{String(selected.id).padStart(3,"0")}</div>
-            <div style={{fontSize:24,fontWeight:500,textTransform:"capitalize",marginBottom:10}}>{selected.name}</div>
-            <div style={{display:"flex",justifyContent:"center",gap:6,marginBottom:"1rem",flexWrap:"wrap"}}>
-              {selected.types.map(t=><TypeBadge key={t} type={t}/>)}
-            </div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-              {[["Height",selected.height],["Weight",selected.weight],["Generation",selected.gen],["Category",selected.cat]].map(([l,v])=>(
-                <div key={l} style={{background:"#f5f5f5",borderRadius:8,padding:"8px 10px"}}>
-                  <div style={{fontSize:11,color:"#888"}}>{l}</div>
-                  <div style={{fontSize:14,fontWeight:500}}>{v}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div>
-            <h3 style={{fontSize:16,fontWeight:500,marginBottom:"1rem",color:"#888"}}>Base Stats</h3>
-            {stats.map(s=><StatBar key={s.label} label={s.label} val={s.val}/>)}
-          </div>
-        </div>
-      )}
-
-      {/* POKEMON GRID */}
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:14,marginBottom:"2.5rem"}}>
-        {filtered.length === 0 ? (
-          <div style={{gridColumn:"1/-1",textAlign:"center",padding:"3rem",color:"#888"}}>
-            No Pokémon found. Try a different search!
-          </div>
-        ) : filtered.map(p => (
-          <div key={p.id} onClick={()=>setSelected(p)}
-            style={{background:"white",border:selected?.id===p.id?"2px solid #E24B4A":"0.5px solid #e0e0e0",
-              borderRadius:12,padding:"1.25rem 1rem",textAlign:"center",cursor:"pointer",
-              transition:"all .2s",position:"relative",
-              transform:selected?.id===p.id?"translateY(-2px)":"none"}}>
-            <button onClick={e=>toggleFav(p.id,e)}
-              style={{position:"absolute",top:8,right:8,background:"none",border:"none",cursor:"pointer",fontSize:16,opacity:favorites.has(p.id)?1:.35}}>
-              {favorites.has(p.id)?"❤️":"🤍"}
-            </button>
-            <span style={{fontSize:46,display:"block",marginBottom:8}}>{p.emoji}</span>
-            <div style={{fontSize:11,color:"#aaa",marginBottom:3}}>#{String(p.id).padStart(3,"0")}</div>
-            <div style={{fontSize:14,fontWeight:500,textTransform:"capitalize",marginBottom:8}}>{p.name}</div>
-            <div style={{display:"flex",justifyContent:"center",gap:4,flexWrap:"wrap"}}>
-              {p.types.map(t=><TypeBadge key={t} type={t}/>)}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* TYPE CHART */}
-      <section style={{marginBottom:"2.5rem"}}>
-        <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Type Distribution</h2>
-        <div style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem"}}>
-          {sortedTypes.map(([type,count]) => (
-            <div key={type} style={{display:"flex",alignItems:"center",gap:12,marginBottom:10}}>
-              <span style={{width:72,fontSize:13,fontWeight:500,textTransform:"capitalize",flexShrink:0}}>{type}</span>
-              <div style={{flex:1,height:22,background:"#f0f0f0",borderRadius:4,overflow:"hidden"}}>
-                <div style={{
-                  height:"100%",width:`${Math.round(count/maxCount*100)}%`,
-                  background:typeColors[type]||"#888",borderRadius:4,
-                  display:"flex",alignItems:"center",paddingLeft:8,
-                  fontSize:11,color:"white",fontWeight:500,transition:"width .8s ease"
-                }}>{count}</div>
-              </div>
-              <span style={{fontSize:12,color:"#888",width:28,flexShrink:0}}>{count}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section>
-        <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Everything You Need</h2>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:14}}>
-          {features.map(f=>(
-            <div key={f.title} style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.25rem"}}>
-              <div style={{fontSize:24,marginBottom:"0.75rem"}}>{f.icon}</div>
-              <h3 style={{fontSize:15,fontWeight:500,marginBottom:6}}>{f.title}</h3>
-              <p style={{fontSize:13,color:"#666",lineHeight:1.6}}>{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-    </div>
-  );
-}
-    </div>
-  );
-}
+  const featured = document.querySelector('.spotlight-featured');
+  if (featured) statObserver.observe(featured);
+</script>
+</body>
+</html>
