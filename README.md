@@ -577,7 +577,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav aria-label="Main navigation">
   <div class="nav-logo">PokéDex</div>
   <ul class="nav-links">
@@ -588,7 +587,6 @@
   </ul>
 </nav>
 
-<!-- HERO -->
 <section id="hero" aria-label="Hero section">
   <div class="hero-stripe" aria-hidden="true"></div>
   <div class="hero-bg-circle" aria-hidden="true"></div>
@@ -607,24 +605,17 @@
     <svg class="pokeball-hero" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Pokéball illustration">
       <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
       <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,215,0,0.12)" stroke-width="2"/>
-      <!-- Top half -->
       <path d="M10,200 A190,190 0 0,1 390,200 Z" fill="#FF1C1C"/>
-      <!-- Bottom half -->
       <path d="M10,200 A190,190 0 0,0 390,200 Z" fill="#FAFAFA"/>
-      <!-- Center stripe -->
       <rect x="0" y="185" width="400" height="30" fill="#0D0D0D"/>
-      <!-- Center button outer -->
       <circle cx="200" cy="200" r="42" fill="#0D0D0D"/>
-      <!-- Center button inner -->
       <circle cx="200" cy="200" r="32" fill="#FAFAFA"/>
-      <!-- Highlight -->
       <circle cx="200" cy="200" r="24" fill="none" stroke="rgba(255,215,0,0.6)" stroke-width="3"/>
       <circle cx="186" cy="186" r="7" fill="rgba(255,255,255,0.5)"/>
     </svg>
   </div>
 </section>
 
-<!-- TICKER -->
 <div class="ticker" aria-hidden="true">
   <div class="ticker-inner">
     <span class="ticker-item">Generation I — Kanto</span><span class="ticker-dot">◆</span>
@@ -648,7 +639,6 @@
   </div>
 </div>
 
-<!-- TYPES -->
 <section id="types" aria-label="Pokémon types">
   <div class="section-header reveal">
     <p class="section-label">Battle Mechanics</p>
@@ -719,7 +709,6 @@
   </div>
 </section>
 
-<!-- SPOTLIGHT -->
 <section id="spotlight" aria-label="Pokémon spotlight">
   <div class="section-header reveal">
     <p class="section-label">Hall of Fame</p>
@@ -823,7 +812,6 @@
   </div>
 </section>
 
-<!-- GENERATIONS -->
 <section id="generations" aria-label="Pokémon generations">
   <div class="section-header reveal">
     <p class="section-label">Journey Through Time</p>
@@ -876,7 +864,6 @@
   </div>
 </section>
 
-<!-- TRIVIA -->
 <section id="trivia" aria-label="Pokémon facts and statistics">
   <div class="section-header reveal">
     <p class="section-label">By the Numbers</p>
@@ -917,7 +904,6 @@
   </div>
 </section>
 
-<!-- STARTERS -->
 <section id="starters" aria-label="Original starter Pokémon">
   <div class="section-header">
     <p class="section-label reveal">The Classic Choice</p>
@@ -946,7 +932,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer aria-label="Footer">
   <div class="footer-brand">
     <div class="nav-logo">PokéDex</div>
