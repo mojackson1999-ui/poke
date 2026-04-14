@@ -1,3 +1,29 @@
+{
+  "name": "pokehub",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}
+    </div>
+  );
+}
+export const metadata = { title: 'PokéHub' }
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body style={{ margin: 0, backgroundColor: "#fff" }}>{children}</body>
+    </html>
+  )
+}
 "use client";
 
 import { useState, useEffect } from "react";
@@ -105,17 +131,9 @@ export default function Page() {
     {label:"Sp. Def",val:selected.spd},{label:"Speed",val:selected.spe},
   ];
 
-  const features = [
-    {icon:"⚔️",title:"Type Matchups",desc:"Instantly see what's super effective, resistant, or immune for every Pokémon type combination."},
-    {icon:"📊",title:"Stat Comparisons",desc:"Visualize base stats with interactive bars. Filter by legendary, starter, or any generation."},
-    {icon:"🏆",title:"Team Builder",desc:"Build a squad of 6. Automatic coverage gap and synergy analysis included."},
-    {icon:"🔍",title:"Advanced Search",desc:"Filter by type, generation, stat ranges, abilities, egg groups, and 30+ other criteria."},
-    {icon:"✨",title:"Shiny Gallery",desc:"Toggle shiny versions for every Pokémon. Explore the full palette of alternate colorations."},
-    {icon:"🗺️",title:"Location Guide",desc:"Find where to catch each Pokémon in every game, with encounter rates and conditions."},
-  ];
-
   return (
     <div style={{fontFamily:"system-ui,sans-serif",maxWidth:1100,margin:"0 auto",padding:"0 1rem 3rem",color:"#1a1a1a"}}>
+      {/* Navigation */}
       <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"1rem 0",borderBottom:"0.5px solid #e0e0e0",marginBottom:"2rem"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,fontSize:20,fontWeight:500}}>
           <div style={{width:28,height:28,borderRadius:"50%",background:"linear-gradient(180deg,#E24B4A 50%,white 50%)",border:"2px solid #333",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -123,35 +141,20 @@ export default function Page() {
           </div>
           PokéHub
         </div>
-        <div style={{display:"flex",gap:24,fontSize:14,color:"#666"}}>
-          {["Pokédex","Types","Moves","Teams"].map(l => (
-            <span key={l} style={{cursor:"pointer"}}>{l}</span>
-          ))}
-        </div>
         <button style={{background:"#E24B4A",color:"white",border:"none",padding:"8px 18px",borderRadius:8,fontSize:14,cursor:"pointer",fontWeight:500}}>
           Start Journey
         </button>
       </nav>
 
+      {/* Hero Section */}
       <section style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:"2rem",alignItems:"center",padding:"2rem 0 3rem"}}>
         <div>
-          <div style={{display:"inline-flex",alignItems:"center",gap:6,background:"#EBF5FF",color:"#185FA5",fontSize:12,padding:"4px 12px",borderRadius:20,marginBottom:"1rem"}}>
-            ⚡ Gen I–IX Complete
-          </div>
           <h1 style={{fontSize:42,fontWeight:500,lineHeight:1.2,marginBottom:"1rem"}}>
             The Ultimate<br/><span style={{color:"#E24B4A"}}>Pokédex</span><br/>Experience
           </h1>
           <p style={{fontSize:16,color:"#666",lineHeight:1.7,marginBottom:"1.5rem"}}>
-            Explore, search, and master every Pokémon across all nine generations. Compare stats, discover type matchups, and build your perfect team.
+            Explore, search, and master every Pokémon across all nine generations. 
           </p>
-          <div style={{display:"flex",gap:12,marginBottom:"2rem"}}>
-            <button style={{background:"#E24B4A",color:"white",border:"none",padding:"12px 24px",borderRadius:8,fontSize:15,cursor:"pointer",fontWeight:500}}>
-              Open Pokédex
-            </button>
-            <button style={{background:"transparent",color:"#1a1a1a",border:"0.5px solid #ccc",padding:"12px 24px",borderRadius:8,fontSize:15,cursor:"pointer"}}>
-              Build a Team
-            </button>
-          </div>
         </div>
         <div style={{background:"#f8f8f8",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"2rem",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:280}}>
           <div style={{fontSize:90,lineHeight:1,marginBottom:8,transform:heroFloat?"translateY(-10px)":"translateY(0)",transition:"transform 1.5s ease-in-out"}}>
@@ -164,22 +167,20 @@ export default function Page() {
         </div>
       </section>
 
+      {/* Search & Filter */}
       <section id="dex">
-        <h2 style={{fontSize:22,fontWeight:500,marginBottom:"1.25rem"}}>Pokédex</h2>
         <div style={{background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
-          <div style={{display:"flex",gap:10,marginBottom:"1rem"}}>
-            <input
-              type="text" placeholder="Search Pokémon by name…" value={search}
-              onChange={e=>setSearch(e.target.value)}
-              style={{flex:1,padding:"10px 14px",border:"0.5px solid #ccc",borderRadius:8,background:"#f8f8f8",fontSize:14,fontFamily:"inherit",outline:"none"}}
-            />
-          </div>
+          <input
+            type="text" placeholder="Search Pokémon..." value={search}
+            onChange={e=>setSearch(e.target.value)}
+            style={{width:"100%",padding:"12px",border:"1px solid #ddd",borderRadius:8,marginBottom:"1rem",fontSize:14}}
+          />
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
             {FILTER_TYPES.map(t => (
               <button key={t} onClick={()=>setFilter(t)}
-                style={{padding:"6px 14px",borderRadius:20,border:filter===t?"1px solid #E24B4A":"0.5px solid #ddd",
-                  background:filter===t?"#FCEBEB":"transparent",
-                  color:filter===t?"#E24B4A":"#666",fontSize:13,cursor:"pointer",transition:"all .2s"}}>
+                style={{padding:"6px 14px",borderRadius:20,border:filter===t?"1px solid #E24B4A":"1px solid #eee",
+                  background:filter===t?"#FCEBEB":"#f9f9f9",
+                  color:filter===t?"#E24B4A":"#666",cursor:"pointer"}}>
                 {t}
               </button>
             ))}
@@ -187,36 +188,25 @@ export default function Page() {
         </div>
       </section>
 
-      {selected && (
-        <div style={{display:"grid",gridTemplateColumns:"1fr 2fr",gap:"1.5rem",background:"white",border:"0.5px solid #e0e0e0",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
-          <div style={{textAlign:"center"}}>
-            <div style={{fontSize:88,lineHeight:1,marginBottom:8,display:"inline-block",transform:heroFloat?"translateY(-8px)":"translateY(0)",transition:"transform 1.5s ease-in-out"}}>
-              {selected.emoji}
-            </div>
-            <div style={{fontSize:13,color:"#888",marginBottom:4}}>#{String(selected.id).padStart(3,"0")}</div>
-            <div style={{fontSize:24,fontWeight:500,textTransform:"capitalize",marginBottom:10}}>{selected.name}</div>
-            <div style={{display:"flex",justifyContent:"center",gap:6,marginBottom:"1rem",flexWrap:"wrap"}}>
-              {selected.types.map(t=><TypeBadge key={t} type={t}/>)}
-            </div>
-          </div>
-          <div>
-            <h3 style={{fontSize:16,fontWeight:500,marginBottom:"1rem",color:"#888"}}>Base Stats</h3>
-            {stats.map(s=><StatBar key={s.label} label={s.label} val={s.val}/>)}
-          </div>
+      {/* Detail Panel */}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 2fr",gap:"1.5rem",background:"white",border:"1px solid #eee",borderRadius:12,padding:"1.5rem",marginBottom:"1.5rem"}}>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontSize:80}}>{selected.emoji}</div>
+          <h3>{selected.name}</h3>
         </div>
-      )}
+        <div>
+          {stats.map(s=><StatBar key={s.label} label={s.label} val={s.val}/>)}
+        </div>
+      </div>
 
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(160px,1fr))",gap:14,marginBottom:"2.5rem"}}>
+      {/* Grid */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(150px,1fr))",gap:12}}>
         {filtered.map(p => (
           <div key={p.id} onClick={()=>setSelected(p)}
-            style={{background:"white",border:selected?.id===p.id?"2px solid #E24B4A":"0.5px solid #e0e0e0",
-              borderRadius:12,padding:"1.25rem 1rem",textAlign:"center",cursor:"pointer",
-              transition:"all .2s",position:"relative"}}>
-            <span style={{fontSize:46,display:"block",marginBottom:8}}>{p.emoji}</span>
-            <div style={{fontSize:14,fontWeight:500,textTransform:"capitalize",marginBottom:8}}>{p.name}</div>
-            <div style={{display:"flex",justifyContent:"center",gap:4,flexWrap:"wrap"}}>
-              {p.types.map(t=><TypeBadge key={t} type={t}/>)}
-            </div>
+            style={{background:"white",border:selected?.id===p.id?"2px solid #E24B4A":"1px solid #eee",
+              borderRadius:12,padding:"1rem",textAlign:"center",cursor:"pointer"}}>
+            <div style={{fontSize:40}}>{p.emoji}</div>
+            <div style={{fontSize:14,fontWeight:500}}>{p.name}</div>
           </div>
         ))}
       </div>
