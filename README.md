@@ -1,6 +1,3 @@
-
-# import { useState, useEffect } from "react";
-
 const typeColors = {
   fire:"#D85A30",water:"#378ADD",grass:"#639922",electric:"#BA7517",
   psychic:"#D4537E",ice:"#1D9E75",dragon:"#534AB7",dark:"#444441",
