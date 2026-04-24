@@ -3,998 +3,1114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PokéDex World — Catch the Legend</title>
-<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@300;400;500;600;700&family=Permanent+Marker&display=swap" rel="stylesheet">
+<title>The Evolution of the Black Voice — Langston Hughes & Kendrick Lamar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --red: #FF1C1C;
-    --red-dark: #C0000F;
-    --yellow: #FFD700;
-    --yellow-light: #FFF176;
-    --blue: #1A237E;
-    --blue-mid: #3949AB;
-    --white: #FAFAFA;
-    --black: #0D0D0D;
-    --gray: #E8E8E8;
-    --gray-mid: #9E9E9E;
-    --green: #4CAF50;
-    --fire: #FF6D00;
-    --water: #0288D1;
-    --psychic: #AD1457;
-    --electric: #F9A825;
-    --grass: #2E7D32;
-    --shadow: rgba(0,0,0,0.15);
-    --ink: rgba(0,0,0,0.08);
+    --cream: #f4ecd8;
+    --cream-dark: #e8dcc0;
+    --ink: #1a1612;
+    --ink-soft: #2d2520;
+    --rust: #c9511e;
+    --rust-deep: #8b3a15;
+    --gold: #d4a84b;
+    --sage: #5a6b4a;
+    --paper: #faf4e4;
   }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'Space Grotesk', sans-serif;
-    background: var(--white);
-    color: var(--black);
-    overflow-x: hidden;
-  }
-
-  /* ─── NAV ─── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 2.5rem;
-    background: var(--black);
-    border-bottom: 3px solid var(--yellow);
-  }
-  .nav-logo {
-    font-family: 'Bangers', cursive;
-    font-size: 2rem;
-    color: var(--yellow);
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 0 var(--red);
-  }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    color: var(--white);
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--yellow); }
-
-  /* ─── HERO ─── */
-  #hero {
-    min-height: 100vh;
-    background: var(--black);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 8rem 2.5rem 4rem;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-bg-circle {
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    border: 3px solid rgba(255,255,255,0.04);
-    top: 50%; right: -100px;
-    transform: translateY(-50%);
-    pointer-events: none;
-  }
-  .hero-bg-circle::before {
-    content: '';
-    position: absolute;
-    width: 80%; height: 80%;
-    border-radius: 50%;
-    border: 3px solid rgba(255,215,0,0.06);
-    top: 10%; left: 10%;
-  }
-  .hero-stripe {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 6px;
-    background: linear-gradient(90deg, var(--red) 0%, var(--red) 49%, var(--white) 49%, var(--white) 51%, #222 51%);
-  }
-  .hero-content { z-index: 1; }
-  .hero-eyebrow {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--yellow);
-    margin-bottom: 1rem;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.2s forwards;
-  }
-  .hero-title {
-    font-family: 'Bangers', cursive;
-    font-size: clamp(5rem, 10vw, 9rem);
-    line-height: 0.9;
-    color: var(--white);
-    letter-spacing: 3px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.35s forwards;
-  }
-  .hero-title span { color: var(--yellow); text-shadow: 4px 4px 0 var(--red); }
-  .hero-subtitle {
-    margin-top: 1.5rem;
-    font-size: 1.1rem;
-    line-height: 1.7;
-    color: var(--gray-mid);
-    max-width: 460px;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.5s forwards;
-  }
-  .hero-cta {
-    margin-top: 2.5rem;
-    display: flex; gap: 1rem; flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.6s 0.65s forwards;
-  }
-  .btn-primary {
-    background: var(--red);
-    color: var(--white);
-    padding: 0.9rem 2rem;
-    font-family: 'Bangers', cursive;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    border: 3px solid var(--red-dark);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: transform 0.15s, box-shadow 0.15s;
-    box-shadow: 4px 4px 0 var(--red-dark);
-  }
-  .btn-primary:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--red-dark); }
-  .btn-secondary {
-    background: transparent;
-    color: var(--yellow);
-    padding: 0.9rem 2rem;
-    font-family: 'Bangers', cursive;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    border: 3px solid var(--yellow);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: background 0.15s, color 0.15s;
-  }
-  .btn-secondary:hover { background: var(--yellow); color: var(--black); }
-
-  /* Pokéball SVG hero graphic */
-  .hero-graphic {
-    display: flex; justify-content: center; align-items: center;
-    z-index: 1;
-    opacity: 0;
-    animation: fadeIn 0.8s 0.8s forwards;
-  }
-  .pokeball-hero {
-    width: min(420px, 90%);
-    animation: float 4s ease-in-out infinite;
-  }
-
-  /* ─── GENERATION TICKER ─── */
-  .ticker {
-    background: var(--red);
-    border-top: 3px solid var(--red-dark);
-    border-bottom: 3px solid var(--red-dark);
-    padding: 0.75rem 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .ticker-inner {
-    display: inline-flex; gap: 3rem;
-    animation: ticker 20s linear infinite;
-  }
-  .ticker-item {
-    font-family: 'Bangers', cursive;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: var(--yellow-light);
-  }
-  .ticker-dot { color: var(--white); opacity: 0.5; }
-
-  /* ─── TYPES SECTION ─── */
-  #types {
-    padding: 7rem 2.5rem;
-    background: var(--white);
-  }
-  .section-header {
-    margin-bottom: 3.5rem;
-  }
-  .section-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--gray-mid);
-    margin-bottom: 0.5rem;
-  }
-  .section-title {
-    font-family: 'Bangers', cursive;
-    font-size: clamp(3rem, 6vw, 5rem);
-    letter-spacing: 2px;
-    line-height: 1;
-    color: var(--black);
-  }
-  .section-title em { color: var(--red); font-style: normal; }
-  .types-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-  }
-  .type-card {
-    padding: 1.5rem 1.25rem;
-    border: 3px solid var(--black);
-    cursor: default;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.15s;
-    box-shadow: 4px 4px 0 var(--black);
-  }
-  .type-card:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--black); }
-  .type-icon { font-size: 2rem; margin-bottom: 0.75rem; }
-  .type-name {
-    font-family: 'Bangers', cursive;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
-    color: var(--white);
-  }
-  .type-desc { font-size: 0.75rem; color: rgba(255,255,255,0.7); margin-top: 0.25rem; line-height: 1.4; }
-  .type-card.fire { background: var(--fire); }
-  .type-card.water { background: var(--water); }
-  .type-card.grass { background: var(--grass); }
-  .type-card.electric { background: var(--electric); }
-  .type-card.psychic { background: var(--psychic); }
-  .type-card.ice { background: #00ACC1; }
-  .type-card.dragon { background: #4527A0; }
-  .type-card.dark { background: #263238; }
-  .type-card.normal { background: #757575; }
-  .type-card.fighting { background: #B71C1C; }
-  .type-card.ghost { background: #4A148C; }
-  .type-card.rock { background: #795548; }
-
-  /* ─── SPOTLIGHT ─── */
-  #spotlight {
-    padding: 7rem 2.5rem;
-    background: var(--black);
-    position: relative;
-    overflow: hidden;
-  }
-  #spotlight .section-title { color: var(--white); }
-  #spotlight .section-label { color: rgba(255,255,255,0.4); }
-  .spotlight-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.3fr;
-    gap: 4rem;
-    align-items: start;
-    margin-top: 3.5rem;
-  }
-  .spotlight-featured {
-    background: #111;
-    border: 3px solid var(--yellow);
-    padding: 2.5rem;
-    position: relative;
-    box-shadow: 8px 8px 0 var(--yellow);
-  }
-  .featured-number {
-    font-family: 'Bangers', cursive;
-    font-size: 5rem;
-    color: rgba(255,255,255,0.06);
-    position: absolute;
-    top: 1rem; right: 1.5rem;
-    line-height: 1;
-  }
-  .featured-label {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--yellow);
-    margin-bottom: 1rem;
-  }
-  .featured-name {
-    font-family: 'Bangers', cursive;
-    font-size: 4rem;
-    color: var(--white);
-    letter-spacing: 2px;
-    line-height: 1;
-  }
-  .featured-types { display: flex; gap: 0.5rem; margin: 1rem 0; }
-  .type-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 0.3rem 0.75rem;
-    border-radius: 2px;
-  }
-  .tb-fire { background: var(--fire); color: var(--white); }
-  .tb-flying { background: #7986CB; color: var(--white); }
-  .tb-water { background: var(--water); color: var(--white); }
-  .tb-ice { background: #00ACC1; color: var(--white); }
-  .tb-psychic { background: var(--psychic); color: var(--white); }
-  .tb-dragon { background: #4527A0; color: var(--white); }
-  .tb-electric { background: var(--electric); color: var(--black); }
-  .featured-desc {
-    font-size: 0.9rem;
-    line-height: 1.7;
-    color: var(--gray-mid);
-    margin-top: 1rem;
-  }
-  .stat-bars { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.6rem; }
-  .stat-row { display: grid; grid-template-columns: 90px 30px 1fr; gap: 0.75rem; align-items: center; }
-  .stat-name { font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--gray-mid); }
-  .stat-val { font-size: 0.8rem; font-weight: 700; color: var(--white); text-align: right; }
-  .stat-bar-bg { height: 6px; background: #222; border-radius: 3px; overflow: hidden; }
-  .stat-bar-fill { height: 100%; background: var(--yellow); border-radius: 3px; transition: width 1s ease; }
-  .spotlight-list { display: flex; flex-direction: column; gap: 1rem; }
-  .poke-row {
-    display: grid;
-    grid-template-columns: 3rem 1fr auto;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 1.25rem;
-    border: 1px solid rgba(255,255,255,0.08);
-    cursor: pointer;
-    transition: background 0.15s, border-color 0.15s;
-  }
-  .poke-row:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
-  .poke-num {
-    font-family: 'Bangers', cursive;
-    font-size: 1.3rem;
-    color: rgba(255,255,255,0.2);
-  }
-  .poke-info-name {
-    font-family: 'Bangers', cursive;
-    font-size: 1.4rem;
-    letter-spacing: 1px;
-    color: var(--white);
-  }
-  .poke-info-type { font-size: 0.7rem; color: var(--gray-mid); margin-top: 2px; }
-  .poke-arrow { color: var(--yellow); font-size: 1.2rem; }
-
-  /* ─── GENERATIONS SECTION ─── */
-  #generations {
-    padding: 7rem 2.5rem;
-    background: var(--gray);
-  }
-  .gen-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-  .gen-card {
-    background: var(--white);
-    border: 3px solid var(--black);
-    padding: 2rem;
-    box-shadow: 5px 5px 0 var(--black);
-    transition: transform 0.15s, box-shadow 0.15s;
-  }
-  .gen-card:hover { transform: translate(-3px, -3px); box-shadow: 8px 8px 0 var(--black); }
-  .gen-number {
-    font-family: 'Bangers', cursive;
-    font-size: 4.5rem;
-    line-height: 1;
+    font-family: 'Fraunces', serif;
+    background: var(--paper);
     color: var(--ink);
-    color: rgba(0,0,0,0.07);
+    overflow-x: hidden;
+    line-height: 1.5;
   }
-  .gen-name {
-    font-family: 'Bangers', cursive;
-    font-size: 2rem;
-    letter-spacing: 1px;
-    color: var(--black);
-    margin-top: -0.5rem;
-  }
-  .gen-region {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--red);
-    margin-bottom: 0.75rem;
-  }
-  .gen-desc { font-size: 0.85rem; line-height: 1.6; color: #555; }
-  .gen-count {
-    margin-top: 1.25rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--gray-mid);
-    letter-spacing: 1px;
-  }
-  .gen-count strong { color: var(--black); font-size: 1rem; }
 
-  /* ─── TRIVIA SECTION ─── */
-  #trivia {
-    padding: 7rem 2.5rem;
-    background: var(--red);
+  /* Grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 1000;
+    mix-blend-mode: multiply;
   }
-  #trivia .section-title { color: var(--white); }
-  #trivia .section-label { color: rgba(255,255,255,0.5); }
-  .trivia-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 1.5rem;
-    margin-top: 3rem;
-  }
-  .trivia-card {
-    background: rgba(0,0,0,0.2);
-    border: 2px solid rgba(255,255,255,0.2);
-    padding: 2rem;
-    transition: background 0.15s;
-  }
-  .trivia-card:hover { background: rgba(0,0,0,0.35); }
-  .trivia-num {
-    font-family: 'Bangers', cursive;
-    font-size: 3rem;
-    color: var(--yellow);
-    line-height: 1;
-    margin-bottom: 0.5rem;
-  }
-  .trivia-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
-    margin-bottom: 0.4rem;
-  }
-  .trivia-text { font-size: 1rem; font-weight: 500; color: var(--white); line-height: 1.5; }
 
-  /* ─── STARTERS ─── */
-  #starters {
-    padding: 7rem 2.5rem;
-    background: var(--black);
-    text-align: center;
+  /* ==== NAVIGATION ==== */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(250, 244, 228, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(26, 22, 18, 0.1);
   }
-  #starters .section-header { text-align: center; }
-  #starters .section-title { color: var(--white); }
-  #starters .section-label { color: rgba(255,255,255,0.4); }
-  .starters-row {
+
+  .nav-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 900;
+    font-style: italic;
+    font-size: 1.3rem;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-logo span { color: var(--rust); }
+
+  .nav-links {
     display: flex;
     gap: 2rem;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 600;
+  }
+
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+  }
+
+  .nav-links a:hover { color: var(--rust); }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--rust);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ==== HERO ==== */
+  .hero {
+    min-height: 100vh;
+    padding: 8rem 3rem 4rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 3.5rem;
+    overflow: hidden;
   }
-  .starter-card {
-    width: 220px;
-    padding: 2.5rem 1.5rem 2rem;
-    border: 3px solid;
-    text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: default;
+
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    color: var(--ink-soft);
   }
-  .starter-card:hover { transform: translateY(-8px); }
-  .starter-card.grass-card { border-color: var(--grass); box-shadow: 0 0 30px rgba(46,125,50,0.3); }
-  .starter-card.fire-card { border-color: var(--fire); box-shadow: 0 0 30px rgba(255,109,0,0.3); }
-  .starter-card.water-card { border-color: var(--water); box-shadow: 0 0 30px rgba(2,136,209,0.3); }
-  .starter-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-  .starter-name {
-    font-family: 'Bangers', cursive;
-    font-size: 2.2rem;
-    letter-spacing: 2px;
-    color: var(--white);
-    margin-bottom: 0.25rem;
+
+  .hero-meta::before {
+    content: '';
+    width: 3rem;
+    height: 1px;
+    background: var(--ink);
   }
-  .starter-type {
-    font-size: 0.7rem;
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 9vw, 9rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 2rem;
+  }
+
+  .hero-title .ital {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--rust);
+  }
+
+  .hero-title .block {
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1.1rem;
+    max-width: 600px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 3rem;
+  }
+
+  .hero-creators {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 2rem;
+    align-items: center;
+    max-width: 900px;
+    margin-top: 2rem;
+  }
+
+  .creator-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.8rem;
     font-weight: 700;
-    letter-spacing: 3px;
+    font-style: italic;
+  }
+
+  .creator-name.left { text-align: right; }
+  .creator-years {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    display: block;
+    margin-top: 0.3rem;
+    color: var(--rust);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  .vs {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--rust);
+  }
+
+  .hero-decoration {
+    position: absolute;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--rust);
+    opacity: 0.08;
+    font-size: 25rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .hero-dec-1 { top: 15%; right: -5%; }
+  .hero-dec-2 { bottom: 5%; left: -3%; }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    right: 3rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ==== SECTIONS ==== */
+  section { padding: 6rem 3rem; position: relative; }
+
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rust);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-tag::before {
+    content: '';
+    width: 2rem;
+    height: 1px;
+    background: var(--rust);
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 3rem;
+  }
+
+  .section-title .ital {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--rust);
+  }
+
+  /* ==== INTRO SECTION ==== */
+  .intro {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .intro .section-tag { color: var(--gold); }
+  .intro .section-tag::before { background: var(--gold); }
+  .intro .section-title .ital { color: var(--gold); }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+  }
+
+  .intro-text {
+    font-size: 1.2rem;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .intro-text p { margin-bottom: 1.5rem; }
+  .intro-text strong { color: var(--gold); font-weight: 600; font-style: italic; }
+
+  .intro-themes {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .theme-pill {
+    border: 1px solid rgba(244, 236, 216, 0.2);
+    padding: 1.5rem 2rem;
+    font-family: 'Archivo', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .theme-pill:hover {
+    background: var(--gold);
+    color: var(--ink);
+    border-color: var(--gold);
+  }
+
+  .theme-pill span {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    opacity: 0.6;
+  }
+
+  /* ==== CREATOR SECTIONS ==== */
+  .creator-section {
+    position: relative;
+  }
+
+  .creator-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3rem;
+    align-items: end;
+    margin-bottom: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .creator-number {
+    font-family: 'Fraunces', serif;
+    font-size: 12rem;
+    font-weight: 900;
+    line-height: 0.8;
+    font-style: italic;
+    color: var(--rust);
+  }
+
+  .creator-identity .creator-era {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     margin-bottom: 1rem;
+    color: var(--ink-soft);
   }
-  .starter-card.grass-card .starter-type { color: #81C784; }
-  .starter-card.fire-card .starter-type { color: #FFB74D; }
-  .starter-card.water-card .starter-type { color: #4FC3F7; }
-  .starter-desc { font-size: 0.82rem; line-height: 1.6; color: var(--gray-mid); }
 
-  /* ─── FOOTER ─── */
-  footer {
-    background: #0a0a0a;
-    border-top: 3px solid var(--yellow);
-    padding: 3rem 2.5rem;
+  .creator-identity h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .creator-identity h2 .ital {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .creator-body {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 2rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+
+  .creator-bio h3 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+    color: var(--rust);
+    font-weight: 700;
+  }
+
+  .creator-bio p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .accomplishments {
+    list-style: none;
+    padding: 0;
+  }
+
+  .accomplishments li {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(26, 22, 18, 0.15);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    font-size: 1rem;
+  }
+
+  .accomplishments li::before {
+    content: '◆';
+    color: var(--rust);
+    font-size: 0.7rem;
+  }
+
+  /* Featured work / quote */
+  .featured-work {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .featured-work::before {
+    content: '"';
+    position: absolute;
+    top: -3rem;
+    left: 1rem;
+    font-family: 'Fraunces', serif;
+    font-size: 20rem;
+    font-style: italic;
+    color: var(--rust);
+    opacity: 0.3;
+    line-height: 1;
+  }
+
+  .work-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .work-title {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    font-style: italic;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-text {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    line-height: 1.5;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-analysis {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: var(--cream-dark);
+    border-top: 1px solid rgba(244, 236, 216, 0.2);
+    padding-top: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .quote-analysis strong {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ==== KENDRICK SECTION (inverted) ==== */
+  .kendrick-section {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .kendrick-section .creator-header { border-bottom-color: var(--paper); }
+  .kendrick-section .creator-identity .creator-era { color: var(--cream-dark); }
+  .kendrick-section .creator-bio h3 { color: var(--gold); }
+  .kendrick-section .creator-number { color: var(--gold); }
+  .kendrick-section .accomplishments li { border-bottom-color: rgba(244, 236, 216, 0.15); }
+  .kendrick-section .accomplishments li::before { color: var(--gold); }
+
+  .kendrick-section .featured-work {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .kendrick-section .featured-work::before { color: var(--rust); opacity: 0.15; }
+  .kendrick-section .work-label { color: var(--rust); }
+  .kendrick-section .quote-analysis { color: var(--ink-soft); border-top-color: rgba(26, 22, 18, 0.15); }
+  .kendrick-section .quote-analysis strong { color: var(--rust); }
+
+  /* ==== COMPARISON ==== */
+  .comparison {
+    background: var(--cream);
+  }
+
+  .comparison-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--ink);
+    margin-top: 3rem;
+  }
+
+  .comparison-col {
+    padding: 3rem;
+    position: relative;
+  }
+
+  .comparison-col:first-child {
+    border-right: 2px solid var(--ink);
+  }
+
+  .comparison-header {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+  }
+
+  .similarities .comparison-header { color: var(--sage); }
+  .differences .comparison-header { color: var(--rust); }
+
+  .comparison-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .comparison-item {
+    margin-bottom: 2rem;
+  }
+
+  .comparison-item h4 {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+  }
+
+  .comparison-item p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.8rem;
+  }
+
+  .evidence-quote {
+    border-left: 3px solid var(--rust);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+  }
+
+  .differences .evidence-quote { border-left-color: var(--ink); }
+  .similarities .evidence-quote { border-left-color: var(--sage); }
+
+  /* ==== IMPACT ==== */
+  .impact {
+    background: var(--rust);
+    color: var(--paper);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .impact .section-tag { color: var(--paper); }
+  .impact .section-tag::before { background: var(--paper); }
+
+  .impact-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 10vw, 10rem);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -0.04em;
+    margin-bottom: 3rem;
+  }
+
+  .impact-title .ital {
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+  }
+
+  .impact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
     align-items: start;
   }
-  .footer-brand .nav-logo { font-size: 2.5rem; }
-  .footer-tagline { font-size: 0.85rem; color: var(--gray-mid); margin-top: 0.5rem; line-height: 1.6; }
-  .footer-col-title {
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--yellow);
-    margin-bottom: 1rem;
-  }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-  .footer-links a {
-    color: var(--gray-mid);
-    text-decoration: none;
-    font-size: 0.85rem;
-    transition: color 0.2s;
-  }
-  .footer-links a:hover { color: var(--white); }
-  .footer-bottom {
-    background: #0a0a0a;
-    padding: 1rem 2.5rem;
-    text-align: center;
-    font-size: 0.75rem;
-    color: #444;
-    border-top: 1px solid rgba(255,255,255,0.05);
+
+  .impact-verdict {
+    border: 2px solid var(--paper);
+    padding: 2rem;
+    background: rgba(0,0,0,0.1);
   }
 
-  /* ─── ANIMATIONS ─── */
+  .verdict-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .verdict-name {
+    font-family: 'Fraunces', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: var(--gold);
+  }
+
+  .verdict-text {
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .impact-reasons p {
+    font-size: 1.15rem;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .impact-reasons strong {
+    color: var(--gold);
+    font-weight: 700;
+    font-style: italic;
+  }
+
+  /* ==== SOURCES ==== */
+  .sources {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 6rem 3rem 4rem;
+  }
+
+  .sources .section-tag { color: var(--gold); }
+  .sources .section-tag::before { background: var(--gold); }
+  .sources .section-title .ital { color: var(--gold); }
+
+  .sources-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .source-card {
+    border: 1px solid rgba(244, 236, 216, 0.2);
+    padding: 1.5rem;
+    transition: all 0.3s;
+  }
+
+  .source-card:hover {
+    background: rgba(212, 168, 75, 0.1);
+    border-color: var(--gold);
+  }
+
+  .source-type {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 0.8rem;
+  }
+
+  .source-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+
+  .source-author {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.85rem;
+    color: var(--cream-dark);
+  }
+
+  /* ==== FOOTER ==== */
+  footer {
+    background: var(--ink);
+    color: var(--cream-dark);
+    padding: 3rem;
+    text-align: center;
+    border-top: 1px solid rgba(244, 236, 216, 0.1);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  footer span { color: var(--gold); }
+
+  /* ==== RESPONSIVE ==== */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section, .hero { padding: 5rem 1.5rem; }
+    .hero { padding-top: 7rem; }
+    .intro-grid, .creator-body, .comparison-grid, .impact-content {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .comparison-col:first-child {
+      border-right: none;
+      border-bottom: 2px solid var(--ink);
+    }
+    .creator-header {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .creator-number { font-size: 6rem; }
+    .featured-work { padding: 2rem; }
+    .quote-text { font-size: 1.2rem; }
+    .hero-creators { grid-template-columns: 1fr; text-align: center; }
+    .creator-name.left { text-align: center; }
+    .vs { font-size: 2rem; }
+  }
+
+  /* ==== ANIMATIONS ==== */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.9); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
-  }
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+
+  .hero-meta { animation: fadeUp 0.8s ease-out 0.2s both; }
+  .hero-title { animation: fadeUp 1s ease-out 0.4s both; }
+  .hero-subtitle { animation: fadeUp 0.8s ease-out 0.7s both; }
+  .hero-creators { animation: fadeUp 0.8s ease-out 0.9s both; }
 
   .reveal {
     opacity: 0;
     transform: translateY(30px);
-    transition: opacity 0.6s, transform 0.6s;
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
   }
+
   .reveal.visible {
     opacity: 1;
     transform: translateY(0);
-  }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.25rem; }
-    .nav-links { display: none; }
-    #hero { grid-template-columns: 1fr; padding: 6rem 1.25rem 3rem; }
-    .hero-graphic { margin-top: 2rem; }
-    .spotlight-grid { grid-template-columns: 1fr; gap: 2rem; }
-    footer { grid-template-columns: 1fr; }
-    #types, #spotlight, #generations, #trivia, #starters { padding: 4rem 1.25rem; }
   }
 </style>
 </head>
 <body>
 
-<nav aria-label="Main navigation">
-  <div class="nav-logo">PokéDex</div>
-  <ul class="nav-links">
-    <li><a href="#types">Types</a></li>
-    <li><a href="#spotlight">Pokémon</a></li>
-    <li><a href="#generations">Generations</a></li>
-    <li><a href="#starters">Starters</a></li>
-  </ul>
+<nav>
+  <div class="nav-logo">The Black <span>Voice</span></div>
+  <div class="nav-links">
+    <a href="#intro">Intro</a>
+    <a href="#hughes">Hughes</a>
+    <a href="#lamar">Lamar</a>
+    <a href="#compare">Compare</a>
+    <a href="#impact">Impact</a>
+    <a href="#sources">Sources</a>
+  </div>
 </nav>
 
-<section id="hero" aria-label="Hero section">
-  <div class="hero-stripe" aria-hidden="true"></div>
-  <div class="hero-bg-circle" aria-hidden="true"></div>
+<!-- HERO / TITLE SLIDE -->
+<section class="hero">
+  <div class="hero-decoration hero-dec-1">&</div>
+  <div class="hero-decoration hero-dec-2">voice</div>
 
-  <div class="hero-content">
-    <p class="hero-eyebrow">The Ultimate Pokémon Universe</p>
-    <h1 class="hero-title">Gotta<br><span>Catch</span><br>'Em All</h1>
-    <p class="hero-subtitle">Over 1,000 species. Nine generations of adventure. One world where creatures of unimaginable power live alongside humanity — waiting to be discovered, trained, and befriended.</p>
-    <div class="hero-cta">
-      <a href="#spotlight" class="btn-primary" aria-label="Explore Pokémon">Explore Now</a>
-      <a href="#types" class="btn-secondary" aria-label="Learn about types">All Types →</a>
+  <div class="hero-meta">
+    <span>A Cross-Generational Study</span>
+    <span>Est. 1926 — 2017</span>
+  </div>
+
+  <h1 class="hero-title">
+    <span class="block">The Evolution</span>
+    <span class="block">of the <span class="ital">Black Voice</span></span>
+  </h1>
+
+  <p class="hero-subtitle">
+    From the jazz-drenched streets of Harlem to the concrete corners of Compton — tracing a century of truth-telling through verse and verse.
+  </p>
+
+  <div class="hero-creators">
+    <div class="creator-name left">
+      Langston Hughes
+      <span class="creator-years">1902 — 1967 · Harlem</span>
+    </div>
+    <div class="vs">&</div>
+    <div class="creator-name">
+      Kendrick Lamar
+      <span class="creator-years">1987 — Present · Compton</span>
     </div>
   </div>
 
-  <div class="hero-graphic" aria-hidden="true">
-    <svg class="pokeball-hero" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Pokéball illustration">
-      <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="4"/>
-      <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,215,0,0.12)" stroke-width="2"/>
-      <path d="M10,200 A190,190 0 0,1 390,200 Z" fill="#FF1C1C"/>
-      <path d="M10,200 A190,190 0 0,0 390,200 Z" fill="#FAFAFA"/>
-      <rect x="0" y="185" width="400" height="30" fill="#0D0D0D"/>
-      <circle cx="200" cy="200" r="42" fill="#0D0D0D"/>
-      <circle cx="200" cy="200" r="32" fill="#FAFAFA"/>
-      <circle cx="200" cy="200" r="24" fill="none" stroke="rgba(255,215,0,0.6)" stroke-width="3"/>
-      <circle cx="186" cy="186" r="7" fill="rgba(255,255,255,0.5)"/>
-    </svg>
-  </div>
+  <div class="scroll-hint">Scroll ↓</div>
 </section>
 
-<div class="ticker" aria-hidden="true">
-  <div class="ticker-inner">
-    <span class="ticker-item">Generation I — Kanto</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation II — Johto</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation III — Hoenn</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation IV — Sinnoh</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation V — Unova</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation VI — Kalos</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation VII — Alola</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation VIII — Galar</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation IX — Paldea</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation I — Kanto</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation II — Johto</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation III — Hoenn</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation IV — Sinnoh</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation V — Unova</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation VI — Kalos</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation VII — Alola</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation VIII — Galar</span><span class="ticker-dot">◆</span>
-    <span class="ticker-item">Generation IX — Paldea</span><span class="ticker-dot">◆</span>
-  </div>
-</div>
+<!-- INTRODUCTION -->
+<section class="intro" id="intro">
+  <div class="section-tag">Slide 02 — Introduction</div>
+  <h2 class="section-title">Two Voices, <span class="ital">One Truth.</span></h2>
 
-<section id="types" aria-label="Pokémon types">
-  <div class="section-header reveal">
-    <p class="section-label">Battle Mechanics</p>
-    <h2 class="section-title">Master the <em>18 Types</em></h2>
-  </div>
-
-  <div class="types-grid">
-    <div class="type-card fire reveal" role="article">
-      <div class="type-icon" aria-hidden="true">🔥</div>
-      <div class="type-name">Fire</div>
-      <div class="type-desc">Scorching offense. Melts Steel, burns Grass & Ice</div>
-    </div>
-    <div class="type-card water reveal" role="article">
-      <div class="type-icon" aria-hidden="true">💧</div>
-      <div class="type-name">Water</div>
-      <div class="type-desc">Adaptable & powerful. Dominates Fire & Rock</div>
-    </div>
-    <div class="type-card grass reveal" role="article">
-      <div class="type-icon" aria-hidden="true">🌿</div>
-      <div class="type-name">Grass</div>
-      <div class="type-desc">Nature's resilience. Absorbs Ground & Water</div>
-    </div>
-    <div class="type-card electric reveal" role="article">
-      <div class="type-icon" aria-hidden="true">⚡</div>
-      <div class="type-name">Electric</div>
-      <div class="type-desc">Shocking speed. Only Ground escapes its sparks</div>
-    </div>
-    <div class="type-card psychic reveal" role="article">
-      <div class="type-icon" aria-hidden="true">🔮</div>
-      <div class="type-name">Psychic</div>
-      <div class="type-desc">Mind over matter. Crushes Poison & Fighting</div>
-    </div>
-    <div class="type-card ice reveal" role="article">
-      <div class="type-icon" aria-hidden="true">❄️</div>
-      <div class="type-name">Ice</div>
-      <div class="type-desc">Fragile but deadly. Freezes Dragon in its tracks</div>
-    </div>
-    <div class="type-card dragon reveal" role="article">
-      <div class="type-icon" aria-hidden="true">🐉</div>
-      <div class="type-name">Dragon</div>
-      <div class="type-desc">Raw legendary power. Weak only to itself & Fairy</div>
-    </div>
-    <div class="type-card dark reveal" role="article">
-      <div class="type-icon" aria-hidden="true">🌑</div>
-      <div class="type-name">Dark</div>
-      <div class="type-desc">Underhanded tactics. Counters Psychic & Ghost</div>
-    </div>
-    <div class="type-card normal reveal" role="article">
-      <div class="type-icon" aria-hidden="true">⭐</div>
-      <div class="type-name">Normal</div>
-      <div class="type-desc">Jack of all trades. No super-effective hits</div>
-    </div>
-    <div class="type-card fighting reveal" role="article">
-      <div class="type-icon" aria-hidden="true">👊</div>
-      <div class="type-name">Fighting</div>
-      <div class="type-desc">Brute strength. Cracks Steel, Rock & Ice with ease</div>
-    </div>
-    <div class="type-card ghost reveal" role="article">
-      <div class="type-icon" aria-hidden="true">👻</div>
-      <div class="type-name">Ghost</div>
-      <div class="type-desc">Immune to Normal. Haunts Psychic & Ghost types</div>
-    </div>
-    <div class="type-card rock reveal" role="article">
-      <div class="type-icon" aria-hidden="true">🪨</div>
-      <div class="type-name">Rock</div>
-      <div class="type-desc">Defensive fortress. Pelts Flying & Fire harshly</div>
-    </div>
-  </div>
-</section>
-
-<section id="spotlight" aria-label="Pokémon spotlight">
-  <div class="section-header reveal">
-    <p class="section-label">Hall of Fame</p>
-    <h2 class="section-title">Legendary <em>Icons</em></h2>
-  </div>
-
-  <div class="spotlight-grid">
-    <div class="spotlight-featured reveal" aria-label="Featured Pokémon: Charizard">
-      <div class="featured-number" aria-hidden="true">#006</div>
-      <div class="featured-label">Featured Pokémon</div>
-      <div class="featured-name">Charizard</div>
-      <div class="featured-types">
-        <span class="type-badge tb-fire">Fire</span>
-        <span class="type-badge tb-flying">Flying</span>
-      </div>
-      <p class="featured-desc">
-        The flame on the tip of its tail indicates Charizard's life force. If it is healthy, the flame burns brightly. Soaring through clouds at 4,600 feet, it spits fire hot enough to melt boulders — making it one of the most recognizable and beloved Pokémon in history.
+  <div class="intro-grid">
+    <div class="intro-text">
+      <p>
+        For centuries, African American artists have used spoken word to protest systemic injustice, solidify their humanity, and document the multiple experiences of Black people.
       </p>
-      <div class="stat-bars" aria-label="Charizard base stats">
-        <div class="stat-row">
-          <span class="stat-name">HP</span>
-          <span class="stat-val">78</span>
-          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="52%"></div></div>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Attack</span>
-          <span class="stat-val">84</span>
-          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="56%"></div></div>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Sp. Attack</span>
-          <span class="stat-val">109</span>
-          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="73%"></div></div>
-        </div>
-        <div class="stat-row">
-          <span class="stat-name">Speed</span>
-          <span class="stat-val">100</span>
-          <div class="stat-bar-bg"><div class="stat-bar-fill" style="width:0%" data-width="67%"></div></div>
-        </div>
-      </div>
+      <p>
+        <strong>Langston Hughes</strong>, the renowned poet of the Harlem Renaissance, and <strong>Kendrick Lamar</strong>, one of the most influential lyricists of the post-1950 era, stand as bookends of this tradition — separated by nearly a century yet bound by a shared mission.
+      </p>
+      <p>
+        Both address racial oppression, delayed equality, and Black resilience — embedding their messages in the dominant sonic language of their time: jazz for Hughes, hip-hop for Lamar.
+      </p>
     </div>
 
-    <div class="spotlight-list reveal" aria-label="Other notable Pokémon">
-      <div class="poke-row" role="article" tabindex="0" aria-label="Mewtwo, number 150, Psychic type">
-        <div class="poke-num">#150</div>
-        <div>
-          <div class="poke-info-name">Mewtwo</div>
-          <div class="poke-info-type"><span class="type-badge tb-psychic" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Psychic</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
+    <div class="intro-themes">
+      <div class="theme-pill">Racial Oppression <span>01</span></div>
+      <div class="theme-pill">Delayed Equality <span>02</span></div>
+      <div class="theme-pill">Black Resilience <span>03</span></div>
+      <div class="theme-pill">Cultural Identity <span>04</span></div>
+      <div class="theme-pill">Systemic Injustice <span>05</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HUGHES SECTION -->
+<section class="creator-section" id="hughes">
+  <div class="section-tag">Slides 03 & 04 — Pre-1950 Creator</div>
+
+  <div class="creator-header">
+    <div class="creator-number">I</div>
+    <div class="creator-identity">
+      <div class="creator-era">Harlem Renaissance · 1920s — 1960s</div>
+      <h2>Langston <span class="ital">Hughes</span></h2>
+    </div>
+  </div>
+
+  <div class="creator-body">
+    <div class="creator-bio">
+      <h3>Background</h3>
+      <p>
+        Born February 1, 1902 in Joplin, Missouri, James Mercer Langston Hughes became one of the most significant literary figures of the 1920s Harlem Renaissance — a cultural explosion that redefined Black creative expression in America.
+      </p>
+
+      <h3>Historical Context</h3>
+      <p>
+        Hughes wrote during the era of Jim Crow segregation, when legal racial separation was enforced throughout much of the United States. His work emerged at a time when Black artists were expected to conform to European literary conventions — a standard he boldly rejected.
+      </p>
+
+      <h3>Major Accomplishments</h3>
+      <ul class="accomplishments">
+        <li>Founding figure of jazz poetry as a literary form</li>
+        <li>Authored <em>The Weary Blues</em> (1926), his debut poetry collection</li>
+        <li>Celebrated working-class Black life without sentimentality</li>
+        <li>Shaped the voice of the Harlem Renaissance movement</li>
+        <li>Left a century-spanning influence on American literature</li>
+      </ul>
+    </div>
+
+    <div class="featured-work">
+      <div class="work-label">Featured Work · 1926</div>
+      <div class="work-title">"I, Too"</div>
+
+      <div class="quote-text">
+        "I, too, sing America. I am the darker brother. They send me to eat in the kitchen when company comes..."
       </div>
-      <div class="poke-row" role="article" tabindex="0" aria-label="Pikachu, number 25, Electric type">
-        <div class="poke-num">#025</div>
-        <div>
-          <div class="poke-info-name">Pikachu</div>
-          <div class="poke-info-type"><span class="type-badge tb-electric" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Electric</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
-      </div>
-      <div class="poke-row" role="article" tabindex="0" aria-label="Gengar, number 94, Ghost and Poison type">
-        <div class="poke-num">#094</div>
-        <div>
-          <div class="poke-info-name">Gengar</div>
-          <div class="poke-info-type"><span class="type-badge tb-flying" style="font-size:0.6rem;padding:0.2rem 0.5rem;background:#4A148C;">Ghost</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
-      </div>
-      <div class="poke-row" role="article" tabindex="0" aria-label="Dragonite, number 149, Dragon and Flying type">
-        <div class="poke-num">#149</div>
-        <div>
-          <div class="poke-info-name">Dragonite</div>
-          <div class="poke-info-type"><span class="type-badge tb-dragon" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Dragon</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
-      </div>
-      <div class="poke-row" role="article" tabindex="0" aria-label="Lucario, number 448, Fighting and Steel type">
-        <div class="poke-num">#448</div>
-        <div>
-          <div class="poke-info-name">Lucario</div>
-          <div class="poke-info-type"><span class="type-badge" style="font-size:0.6rem;padding:0.2rem 0.5rem;background:#B71C1C;color:white;">Fighting</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
-      </div>
-      <div class="poke-row" role="article" tabindex="0" aria-label="Gyarados, number 130, Water and Flying type">
-        <div class="poke-num">#130</div>
-        <div>
-          <div class="poke-info-name">Gyarados</div>
-          <div class="poke-info-type"><span class="type-badge tb-water" style="font-size:0.6rem;padding:0.2rem 0.5rem;">Water</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
-      </div>
-      <div class="poke-row" role="article" tabindex="0" aria-label="Eevee, number 133, Normal type">
-        <div class="poke-num">#133</div>
-        <div>
-          <div class="poke-info-name">Eevee</div>
-          <div class="poke-info-type"><span class="type-badge" style="font-size:0.6rem;padding:0.2rem 0.5rem;background:#757575;color:white;">Normal</span></div>
-        </div>
-        <div class="poke-arrow">→</div>
+
+      <div class="quote-analysis">
+        <strong>CONNECTION TO THE BLACK EXPERIENCE:</strong> This poem captures the wrongfulness of being marginalized while asserting a rightful place in America. Hughes uses the metaphor of being sent to eat in the kitchen to illustrate segregation — yet the speaker's patient confidence declares an undeniable claim to American identity. According to the Poetry Foundation, Hughes sought to honestly record working-class Black life while "avoiding both sentimental idealization and negative stereotypes."
       </div>
     </div>
   </div>
 </section>
 
-<section id="generations" aria-label="Pokémon generations">
-  <div class="section-header reveal">
-    <p class="section-label">Journey Through Time</p>
-    <h2 class="section-title">Nine <em>Generations</em></h2>
+<!-- LAMAR SECTION -->
+<section class="creator-section kendrick-section" id="lamar">
+  <div class="section-tag" style="color: var(--gold);">
+    <span style="background: var(--gold); height: 1px; width: 2rem; display: inline-block; margin-right: 1rem;"></span>
+    Slides 05 & 06 — Post-1950 Creator
   </div>
 
-  <div class="gen-grid">
-    <div class="gen-card reveal" role="article">
-      <div class="gen-number" aria-hidden="true">I</div>
-      <div class="gen-region">Kanto Region</div>
-      <div class="gen-name">Red & Blue</div>
-      <p class="gen-desc">Where it all began. Professor Oak hands you a Pokédex in Pallet Town and an entire world opens up. The original 151 became cultural icons overnight.</p>
-      <div class="gen-count"><strong>151</strong> Pokémon · 1996</div>
+  <div class="creator-header">
+    <div class="creator-number">II</div>
+    <div class="creator-identity">
+      <div class="creator-era">Modern Hip-Hop Era · 2010s — Present</div>
+      <h2>Kendrick <span class="ital">Lamar</span></h2>
     </div>
-    <div class="gen-card reveal" role="article">
-      <div class="gen-number" aria-hidden="true">II</div>
-      <div class="gen-region">Johto Region</div>
-      <div class="gen-name">Gold & Silver</div>
-      <p class="gen-desc">Day and night cycles changed everything. The addition of breeding, held items, and two full regions to explore cemented Pokémon as a franchise for life.</p>
-      <div class="gen-count"><strong>100</strong> Pokémon · 1999</div>
+  </div>
+
+  <div class="creator-body">
+    <div class="creator-bio">
+      <h3>Background</h3>
+      <p>
+        Born June 17, 1987 in Compton, California, Kendrick Lamar Duckworth has become arguably the most important lyricist of his generation. His music uses conscious hip-hop to dissect the complexities of modern Black life with uncompromising honesty.
+      </p>
+
+      <h3>Historical Context</h3>
+      <p>
+        Lamar operates in a post-Civil Rights society where overt, legal segregation has ended — but systemic racism persists beneath the surface of institutions. His work emerges in the age of police brutality protests, Black Lives Matter, and the digital mobilization of social movements.
+      </p>
+
+      <h3>Major Accomplishments</h3>
+      <ul class="accomplishments">
+        <li>First hip-hop artist to win the Pulitzer Prize for Music (2018)</li>
+        <li>17 Grammy Awards across his career</li>
+        <li><em>DAMN.</em> (2017) — the Pulitzer-winning album</li>
+        <li>Headlined the Super Bowl LIX halftime show</li>
+        <li>Dense, multi-layered lyrics on race, trauma, and identity</li>
+      </ul>
     </div>
-    <div class="gen-card reveal" role="article">
-      <div class="gen-number" aria-hidden="true">III</div>
-      <div class="gen-region">Hoenn Region</div>
-      <div class="gen-name">Ruby & Sapphire</div>
-      <p class="gen-desc">A tropical paradise of water routes and secret bases. Contests, double battles, and abilities reinvented competitive play entirely.</p>
-      <div class="gen-count"><strong>135</strong> Pokémon · 2002</div>
-    </div>
-    <div class="gen-card reveal" role="article">
-      <div class="gen-number" aria-hidden="true">IV</div>
-      <div class="gen-region">Sinnoh Region</div>
-      <div class="gen-name">Diamond & Pearl</div>
-      <p class="gen-desc">Mythology and time travel. Dialga, Palkia, and Giratina introduced cosmic stakes while the Underground brought players together in brand new ways.</p>
-      <div class="gen-count"><strong>107</strong> Pokémon · 2006</div>
-    </div>
-    <div class="gen-card reveal" role="article">
-      <div class="gen-number" aria-hidden="true">V</div>
-      <div class="gen-region">Unova Region</div>
-      <div class="gen-name">Black & White</div>
-      <p class="gen-desc">The most ambitious story in the series. A cinematic adventure questioning whether Pokémon battles are ethical — and featuring the best rival cast in franchise history.</p>
-      <div class="gen-count"><strong>156</strong> Pokémon · 2010</div>
-    </div>
-    <div class="gen-card reveal" role="article">
-      <div class="gen-number" aria-hidden="true">IX</div>
-      <div class="gen-region">Paldea Region</div>
-      <div class="gen-name">Scarlet & Violet</div>
-      <p class="gen-desc">The first truly open-world Pokémon games. Three intertwining storylines let you blaze your own path through a sun-drenched Mediterranean landscape filled with new discoveries.</p>
-      <div class="gen-count"><strong>120</strong> Pokémon · 2022</div>
+
+    <div class="featured-work">
+      <div class="work-label">Featured Work · 2015</div>
+      <div class="work-title">"Alright"</div>
+
+      <div class="quote-text">
+        "We been hurt, been down before... But we gon' be alright."
+      </div>
+
+      <div class="quote-analysis">
+        <strong>CONNECTION TO THE BLACK EXPERIENCE:</strong> This Grammy-winning track became an anthem of the Black Lives Matter movement, chanted at protests across America. Lamar acknowledges historic pain while offering survival and endurance. The Pulitzer Board praised his work as a "virtuosic song collection... capturing the complexity of modern African American life." His music balances cultural critique with community healing.
+      </div>
     </div>
   </div>
 </section>
 
-<section id="trivia" aria-label="Pokémon facts and statistics">
-  <div class="section-header reveal">
-    <p class="section-label">By the Numbers</p>
-    <h2 class="section-title">The Scale of <em>Pokémon</em></h2>
-  </div>
+<!-- COMPARISON: SIMILARITIES & DIFFERENCES -->
+<section class="comparison" id="compare">
+  <div class="section-tag">Slides 07 & 08 — Comparative Analysis</div>
+  <h2 class="section-title">Mirror &amp; <span class="ital">Divergence.</span></h2>
 
-  <div class="trivia-grid">
-    <div class="trivia-card reveal" role="article">
-      <div class="trivia-num">1,025</div>
-      <div class="trivia-label">Total Species</div>
-      <div class="trivia-text">Pokémon officially registered in the National Pokédex as of Generation IX</div>
+  <div class="comparison-grid">
+
+    <div class="comparison-col similarities">
+      <div class="comparison-header">Alike</div>
+      <div class="comparison-sub">Shared Ground</div>
+
+      <div class="comparison-item">
+        <h4>Truth-Tellers of Their Generation</h4>
+        <p>Both artists serve as truth-tellers for their generations, using the most influential genre of their time — jazz and blues for Hughes, hip-hop and funk for Lamar.</p>
+      </div>
+
+      <div class="comparison-item">
+        <h4>Themes of Resilience &amp; Black Pride</h4>
+        <p>Both emphasize endurance and the dignity of Black identity in a society that seeks to diminish it.</p>
+        <div class="evidence-quote">"I am the darker brother" — Hughes<br>"We gon' be alright" — Lamar</div>
+      </div>
+
+      <div class="comparison-item">
+        <h4>Authentic Representation</h4>
+        <p>Both celebrate everyday Black life — working-class Harlem for Hughes, Compton neighborhoods for Lamar — refusing to sanitize the experience for mainstream approval.</p>
+      </div>
+
+      <div class="comparison-item">
+        <h4>Cultural Validation</h4>
+        <p>Each artist provides a mirror for the Black community, validating their struggles and giving voice to their undeniable worth.</p>
+      </div>
     </div>
-    <div class="trivia-card reveal" role="article">
-      <div class="trivia-num">18</div>
-      <div class="trivia-label">Types</div>
-      <div class="trivia-text">Unique elemental types governing 324 possible matchup combinations</div>
-    </div>
-    <div class="trivia-card reveal" role="article">
-      <div class="trivia-num">440M+</div>
-      <div class="trivia-label">Games Sold</div>
-      <div class="trivia-text">Making Pokémon the highest-grossing media franchise of all time — over $150 billion</div>
-    </div>
-    <div class="trivia-card reveal" role="article">
-      <div class="trivia-num">900+</div>
-      <div class="trivia-label">Anime Episodes</div>
-      <div class="trivia-text">Ash Ketchum's journey spanned 26 years before he finally became World Champion</div>
-    </div>
-    <div class="trivia-card reveal" role="article">
-      <div class="trivia-num">43.2B</div>
-      <div class="trivia-label">Cards Sold</div>
-      <div class="trivia-text">The Pokémon Trading Card Game remains one of the world's most collected hobbies</div>
-    </div>
-    <div class="trivia-card reveal" role="article">
-      <div class="trivia-num">1996</div>
-      <div class="trivia-label">Year Born</div>
-      <div class="trivia-text">Satoshi Tajiri's childhood dream of insect collecting became the world's greatest monster franchise</div>
+
+    <div class="comparison-col differences">
+      <div class="comparison-header">Apart</div>
+      <div class="comparison-sub">Where They Diverge</div>
+
+      <div class="comparison-item">
+        <h4>Historical Context</h4>
+        <p>Hughes wrote under explicit, legal Jim Crow segregation. Lamar operates in a post-Civil Rights era where racism is concealed within institutions.</p>
+      </div>
+
+      <div class="comparison-item">
+        <h4>Tone &amp; Delivery</h4>
+        <p>Hughes's tone alternates between optimism and patient questioning — demanding a seat at the metaphorical table.</p>
+        <div class="evidence-quote">"What happens to a dream deferred?" — Hughes</div>
+      </div>
+
+      <div class="comparison-item">
+        <h4>Confrontation vs. Appeal</h4>
+        <p>Lamar's style is raw and confrontational — he doesn't ask for a seat at the table. His lyrics indict the system directly.</p>
+        <div class="evidence-quote">"You hate me, don't you? You hate my people, your plan is to terminate my culture." — Lamar, <em>The Blacker the Berry</em></div>
+      </div>
+
+      <div class="comparison-item">
+        <h4>Medium &amp; Reach</h4>
+        <p>Hughes worked in print poetry distributed through magazines and books. Lamar operates in the digital age — streaming, social media, and global mobilization in real time.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="starters" aria-label="Original starter Pokémon">
-  <div class="section-header">
-    <p class="section-label reveal">The Classic Choice</p>
-    <h2 class="section-title reveal">Choose Your <em>Starter</em></h2>
-  </div>
+<!-- IMPACT -->
+<section class="impact" id="impact">
+  <div class="section-tag">Slide 09 — Legacy &amp; Influence</div>
+  <h2 class="impact-title">Who Carries <span class="ital">The Louder Echo?</span></h2>
 
-  <div class="starters-row">
-    <div class="starter-card grass-card reveal" role="article" aria-label="Bulbasaur, Grass type starter">
-      <div class="starter-icon" aria-hidden="true">🌱</div>
-      <div class="starter-name">Bulbasaur</div>
-      <div class="starter-type">Grass / Poison</div>
-      <p class="starter-desc">Born with a bulb on its back, this dinosaur-frog hybrid is the easiest choice for first-time trainers — its Vine Whip dominates the first two gyms.</p>
+  <div class="impact-content">
+    <div class="impact-verdict">
+      <div class="verdict-label">Stronger Immediate Impact</div>
+      <div class="verdict-name">Kendrick Lamar</div>
+      <div class="verdict-text">
+        While Hughes's historical importance is unmatched, Lamar's ability to mobilize a global audience in real time gives his work a stronger immediate social impact on today's society.
+      </div>
     </div>
-    <div class="starter-card fire-card reveal" role="article" aria-label="Charmander, Fire type starter">
-      <div class="starter-icon" aria-hidden="true">🔥</div>
-      <div class="starter-name">Charmander</div>
-      <div class="starter-type">Fire</div>
-      <p class="starter-desc">The hard-mode starter with the highest payoff. Evolves into the iconic Charizard — the single most popular Pokémon ever created, and a fan favorite for 30 years.</p>
-    </div>
-    <div class="starter-card water-card reveal" role="article" aria-label="Squirtle, Water type starter">
-      <div class="starter-icon" aria-hidden="true">💧</div>
-      <div class="starter-name">Squirtle</div>
-      <div class="starter-type">Water</div>
-      <p class="starter-desc">The well-rounded choice. Squirtle's squad is legendary. It evolves into Blastoise, a tank-like powerhouse that fires jets of water with pinpoint accuracy.</p>
+
+    <div class="impact-reasons">
+      <p>
+        <strong>The digital age</strong> has transformed what an artist can do. A Lamar verse can reach millions within hours, soundtrack a protest the same week, and shape national conversation the next.
+      </p>
+      <p>
+        Songs like <em>Alright</em> became rallying cries for Black Lives Matter — chanted in the streets from Ferguson to Minneapolis. This is <strong>art as movement</strong>, not just art about movement.
+      </p>
+      <p>
+        Yet both artists share the same enduring message — one that still rings within not only the Black community, but all communities across the world. Hughes planted the seed; Lamar harvests in a new century.
+      </p>
     </div>
   </div>
 </section>
 
-<footer aria-label="Footer">
-  <div class="footer-brand">
-    <div class="nav-logo">PokéDex</div>
-    <p class="footer-tagline">A fan-made celebration of the Pokémon universe. Not affiliated with Nintendo, Game Freak, or The Pokémon Company.</p>
+<!-- SOURCES -->
+<section class="sources" id="sources">
+  <div class="section-tag">Slide 10 — Sources &amp; Citations</div>
+  <h2 class="section-title">The <span class="ital">Record.</span></h2>
+
+  <div class="sources-list">
+    <div class="source-card">
+      <div class="source-type">Poem · 1926</div>
+      <div class="source-title">"I, Too"</div>
+      <div class="source-author">Langston Hughes</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Poem</div>
+      <div class="source-title">"Harlem" (A Dream Deferred)</div>
+      <div class="source-author">Langston Hughes</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Website · Biography</div>
+      <div class="source-title">"Langston Hughes"</div>
+      <div class="source-author">The Poetry Foundation</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Song · 2015</div>
+      <div class="source-title">"Alright"</div>
+      <div class="source-author">Kendrick Lamar · To Pimp a Butterfly</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Song · 2015</div>
+      <div class="source-title">"The Blacker the Berry"</div>
+      <div class="source-author">Kendrick Lamar · To Pimp a Butterfly</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Album · 2017</div>
+      <div class="source-title">DAMN.</div>
+      <div class="source-author">Kendrick Lamar · Pulitzer Prize winner</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Citation · 2018</div>
+      <div class="source-title">Pulitzer Prize for Music Citation</div>
+      <div class="source-author">The Pulitzer Board</div>
+    </div>
+
+    <div class="source-card">
+      <div class="source-type">Website · Biography</div>
+      <div class="source-title">"Kendrick Lamar"</div>
+      <div class="source-author">Biographical reference materials</div>
+    </div>
   </div>
-  <div>
-    <div class="footer-col-title">Explore</div>
-    <ul class="footer-links">
-      <li><a href="#types">Battle Types</a></li>
-      <li><a href="#spotlight">Hall of Fame</a></li>
-      <li><a href="#generations">All Generations</a></li>
-      <li><a href="#starters">Starter Pokémon</a></li>
-    </ul>
-  </div>
-  <div>
-    <div class="footer-col-title">Discover</div>
-    <ul class="footer-links">
-      <li><a href="#trivia">Pokémon Facts</a></li>
-      <li><a href="#hero">Back to Top</a></li>
-    </ul>
-  </div>
+</section>
+
+<footer>
+  A Comparative Study · <span>English Literature Project</span> · The Black Voice in America
 </footer>
-<div class="footer-bottom">
-  <p>Pokémon and all related names are trademarks of Nintendo / Creatures Inc. / GAME FREAK inc. Fan tribute only.</p>
-</div>
 
 <script>
-  // Intersection observer for reveal animations
-  const revealEls = document.querySelectorAll('.reveal');
+  // Reveal on scroll
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), 80);
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-  revealEls.forEach(el => observer.observe(el));
-
-  // Stagger sibling reveals
-  document.querySelectorAll('.types-grid, .gen-grid, .trivia-grid, .starters-row, .spotlight-list').forEach(grid => {
-    const children = grid.querySelectorAll('.reveal');
-    children.forEach((child, i) => {
-      child.style.transitionDelay = `${i * 60}ms`;
-    });
-  });
-
-  // Animate stat bars when they come into view
-  const statObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.stat-bar-fill').forEach(bar => {
-          const target = bar.dataset.width;
-          bar.style.width = target;
-        });
-        statObserver.unobserve(entry.target);
+        entry.target.classList.add('visible');
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.1 });
 
-  const featured = document.querySelector('.spotlight-featured');
-  if (featured) statObserver.observe(featured);
+  document.querySelectorAll('section:not(.hero)').forEach(sec => {
+    sec.classList.add('reveal');
+    observer.observe(sec);
+  });
 </script>
+
 </body>
 </html>
